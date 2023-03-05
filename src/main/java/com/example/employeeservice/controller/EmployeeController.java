@@ -1,11 +1,15 @@
 package com.example.employeeservice.controller;
 
-import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.employeeservice.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
-@RestController
-@RequestMapping("/employee")
-@Api(value = "EmployeeController RESTful endpoints")
+@Controller
 public class EmployeeController {
+    EmployeeService employeeService;
+
+    @Autowired
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 }
