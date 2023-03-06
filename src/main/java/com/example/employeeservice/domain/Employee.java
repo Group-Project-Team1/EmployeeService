@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
 @Document(collection = "employee")
 @Getter
@@ -26,13 +27,17 @@ public class Employee {
     private Date DOB;
     private Date startDate;
     private Date endDate;
-    private DriverLicense DriverLicense;
+    private String driverLicense;
     private Date driverLicenseExpiration;
-    private String houseId;
-    private Contact contact;
-    private Address address;
-    private VisaStatus visaStatus;
-    private PersonalDocument personalDocument;
+    private Integer houseId;
+//    private Contact contact;
+    private List<Contact> contacts;
+//    private Address address;
+    private List<Address> addresses;
+//    private VisaStatus visaStatus;
+    private List<VisaStatus> visaStatuses;
+//    private PersonalDocument personalDocument;
+    private List<PersonalDocument> personalDocuments;
 
 
 }

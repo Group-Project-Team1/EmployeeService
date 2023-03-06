@@ -49,4 +49,7 @@ public class EmployeeService {
     }
 
 
+    public Employee findEmployeeById(int id) {
+        return employeeRepo.findEmployeeById(id);
+    }
 }
