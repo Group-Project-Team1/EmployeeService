@@ -6,7 +6,10 @@ import com.example.employeeservice.domain.entity.PersonalDocument;
 import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,6 +73,8 @@ public class EmployeeService {
     }
 
     public List<Employee> findEmployeesByPage(int page, int itemsPerPage) {
-        return pagingAndSortingRepo.findAll(PageRequest.of(page, itemsPerPage)).getContent();
+        Sort sort = Sort.by(Sort.Direction.ASC, "lastName");
+        Pageable pageable = PageRequest.of(page, itemsPerPage, sort);
+        return pagingAndSortingRepo.findAll(pageable).getContent();
     }
 }
