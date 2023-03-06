@@ -111,28 +111,7 @@ public class EmployeeController {
 //
 //    }
 //
-    //add addresses, contacts, etc.
-//    @PostMapping("/addToList")
-//    public void addToList(@PathParam("id") Integer id, @RequestBody Object object) {
-//        System.out.println("dayin");
-//        System.out.println(object);
-//        System.out.println(object.getClass());
-//        Employee employee = employeeService.findEmployeeById(id);
-//        if (object instanceof Contact) {
-//            System.out.println((Contact)object);
-//            employee.getContacts().add((Contact) object);
-//        }
-//        else if (object instanceof Address) {
-//            employee.getAddresses().add((Address) object);
-//        }
-//        else if (object instanceof VisaStatus) {
-//            employee.getVisaStatuses().add((VisaStatus) object);
-//        }
-//        else if (object instanceof PersonalDocument) {
-//            employee.getPersonalDocuments().add((PersonalDocument) object);
-//        }
-//        employeeService.saveEmployee(employee);
-//    }
+
 
     @PostMapping("/addContact")
     public void addContact(@PathParam("id") Integer id, @RequestBody Contact contact) {
@@ -140,6 +119,31 @@ public class EmployeeController {
         employee.getContacts().add(contact);
         employeeService.saveEmployee(employee);
     }
+
+    @PostMapping("/addAddress")
+    public void addAddress(@PathParam("id") Integer id, @RequestBody Address address) {
+        Employee employee = employeeService.findEmployeeById(id);
+        employee.getAddresses().add(address);
+        employeeService.saveEmployee(employee);
+    }
+
+    @PostMapping("/addVisaStatus")
+    public void addVisaStatus(@PathParam("id") Integer id, @RequestBody VisaStatus visaStatus) {
+        Employee employee = employeeService.findEmployeeById(id);
+        employee.getVisaStatuses().add(visaStatus);
+        employeeService.saveEmployee(employee);
+    }
+
+    @PostMapping("/addPersonalDocument")
+    public void addPersonalDocument(@PathParam("id") Integer id, @RequestBody PersonalDocument personalDocument) {
+        Employee employee = employeeService.findEmployeeById(id);
+        employee.getPersonalDocuments().add(personalDocument);
+        employeeService.saveEmployee(employee);
+    }
+
+
+
+
 
 
 //

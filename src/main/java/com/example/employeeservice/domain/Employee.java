@@ -30,13 +30,9 @@ public class Employee {
     private String driverLicense;
     private Date driverLicenseExpiration;
     private Integer houseId;
-//    private Contact contact;
     private List<Contact> contacts;
-//    private Address address;
     private List<Address> addresses;
-//    private VisaStatus visaStatus;
     private List<VisaStatus> visaStatuses;
-//    private PersonalDocument personalDocument;
     private List<PersonalDocument> personalDocuments;
 
 
