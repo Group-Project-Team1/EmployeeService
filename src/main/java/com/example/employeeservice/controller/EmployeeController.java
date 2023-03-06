@@ -1,6 +1,7 @@
 package com.example.employeeservice.controller;
 
 import com.example.employeeservice.domain.entity.*;
+import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.service.EmployeeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,11 @@ public class EmployeeController {
     @GetMapping("/find")
     public Employee findEmployeeById(@PathParam("id") Integer id) {
         return employeeService.findEmployeeById(id);
+    }
+
+    @GetMapping("/viewProfile")
+    public EmployeeProfile viewProfileById(@PathParam("id") Integer id) {
+        return new EmployeeProfile(employeeService.findEmployeeById(id));
     }
 
     @GetMapping("/findByEmail")
