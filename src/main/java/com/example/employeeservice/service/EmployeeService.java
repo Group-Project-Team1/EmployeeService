@@ -1,9 +1,9 @@
 package com.example.employeeservice.service;
 
-import com.example.employeeservice.domain.Contact;
-import com.example.employeeservice.domain.Employee;
-import com.example.employeeservice.domain.PersonalDocument;
-import com.example.employeeservice.domain.VisaStatus;
+import com.example.employeeservice.domain.entity.Contact;
+import com.example.employeeservice.domain.entity.Employee;
+import com.example.employeeservice.domain.entity.PersonalDocument;
+import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.repository.ContactRepo;
 import com.example.employeeservice.repository.EmployeeRepo;
 import com.example.employeeservice.repository.PersonalDocumentRepo;

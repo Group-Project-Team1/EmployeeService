@@ -1,4 +1,4 @@
-package com.example.employeeservice.domain;
+package com.example.employeeservice.domain.entity;
 
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @ToString
 public class Contact {
+
+    @ToString.Exclude
     private Integer id;
     private String firstName;
     private String lastName;
@@ -17,5 +19,6 @@ public class Contact {
     private String AlternatePhone;
     private String email;
     private String Relationship;
+    @ToString.Exclude
     private String type;
 }

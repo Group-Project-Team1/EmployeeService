@@ -1,4 +1,4 @@
-package com.example.employeeservice.domain;
+package com.example.employeeservice.domain.entity;
 
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -1,4 +1,4 @@
-package com.example.employeeservice.domain;
+package com.example.employeeservice.domain.entity;
 
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,8 +23,8 @@ public class Employee {
     private String cellPhone;
     private String alternatePhone;
     private String gender;
-    private String SSN;
-    private Date DOB;
+    private String ssn;
+    private Date dob;
     private Date startDate;
     private Date endDate;
     private String driverLicense;

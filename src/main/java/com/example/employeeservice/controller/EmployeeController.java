@@ -1,11 +1,9 @@
 package com.example.employeeservice.controller;
 
-import com.example.employeeservice.domain.*;
+import com.example.employeeservice.domain.entity.*;
 import com.example.employeeservice.service.EmployeeService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -75,11 +73,11 @@ public class EmployeeController {
             employee.setGender(val);
         }
         else if (key.equals("ssn")) {
-            employee.setSSN(val);
+            employee.setSsn(val);
         }
         else if (key.equals("dob")) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            employee.setDOB(dateFormat.parse(val));
+            employee.setDob(dateFormat.parse(val));
         }
 //        else if (key.equals("startdate")) {
 //            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
