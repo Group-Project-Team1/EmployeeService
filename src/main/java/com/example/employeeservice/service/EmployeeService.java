@@ -109,4 +109,8 @@ public class EmployeeService {
         }
         return visaStatusResponses.subList(size * (page - 1), Math.min(size * page, n));
     }
+
+    public List<Employee> findEmployeesByHouseId(Integer houseId) {
+        return employeeRepo.findEmployeesByHouseId(houseId);
+    }
 }

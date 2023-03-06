@@ -107,6 +107,11 @@ public class HrController {
         return false;
     }
 
+    @GetMapping("/housing")
+    public List<EmployeeSummary> viewAllEmployeesByHouseId(@PathParam("houseId") Integer houseId) {
+        return employeeService.findEmployeesByHouseId(houseId).stream().map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
+    }
+
 
 //    public List<Employee> findAllEmployeesPaginated() {
 //        return employeeService.findAllEmployees();

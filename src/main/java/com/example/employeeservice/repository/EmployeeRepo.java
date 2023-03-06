@@ -19,4 +19,6 @@ public interface EmployeeRepo extends MongoRepository<Employee, Integer> {
     List<Employee> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrMiddleNameContainingIgnoreCaseOrPreferredNameContainingIgnoreCase(String name1, String name2, String name3, String name4);
 
     Employee findEmployeeByEmail(String email);
+
+    List<Employee> findEmployeesByHouseId(Integer houseId);
 }
