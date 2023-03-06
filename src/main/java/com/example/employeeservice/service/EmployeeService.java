@@ -4,28 +4,31 @@ import com.example.employeeservice.domain.entity.Contact;
 import com.example.employeeservice.domain.entity.Employee;
 import com.example.employeeservice.domain.entity.PersonalDocument;
 import com.example.employeeservice.domain.entity.VisaStatus;
-import com.example.employeeservice.repository.ContactRepo;
-import com.example.employeeservice.repository.EmployeeRepo;
-import com.example.employeeservice.repository.PersonalDocumentRepo;
-import com.example.employeeservice.repository.VisaStatusRepo;
+import com.example.employeeservice.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class EmployeeService {
+    EmployeeRepo employeeRepo;
 
+    ContactRepo contactRepo;
 
-    private EmployeeRepo employeeRepo;
+    PagingAndSortingRepo pagingAndSortingRepo;
 
-    private ContactRepo contactRepo;
+    VisaStatusRepo visaStatusRepo;
+    PersonalDocumentRepo personalDocumentRepo;
 
-    private VisaStatusRepo visaStatusRepo;
-    private PersonalDocumentRepo personalDocumentRepo;
-
-    public EmployeeService(EmployeeRepo employeeRepo, ContactRepo contactRepo) {
+    @Autowired
+    public EmployeeService(EmployeeRepo employeeRepo, ContactRepo contactRepo, VisaStatusRepo visaStatusRepo, PersonalDocumentRepo personalDocumentRepo, PagingAndSortingRepo pagingAndSortingRepo) {
         this.employeeRepo = employeeRepo;
         this.contactRepo = contactRepo;
+        this.visaStatusRepo = visaStatusRepo;
+        this.personalDocumentRepo = personalDocumentRepo;
+        this.pagingAndSortingRepo = pagingAndSortingRepo;
     }
 
     public void saveEmployee(Employee employee) {
@@ -64,5 +67,9 @@ public class EmployeeService {
             throw new ArithmeticException("Exceed! Try smaller number of size.");
         }
         return employees.subList(size * (page - 1), Math.min(size * page, n));
+    }
+
+    public List<Employee> findEmployeesByPage(int page, int itemsPerPage) {
+        return pagingAndSortingRepo.findAll(PageRequest.of(page, itemsPerPage)).getContent();
     }
 }

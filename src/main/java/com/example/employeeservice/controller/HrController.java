@@ -7,6 +7,7 @@ import com.example.employeeservice.service.EmployeeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,6 +48,12 @@ public class HrController {
         return employees.stream().sorted((a, b) -> a.getLastName().compareTo(b.getLastName())).map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
     }
 
+    @GetMapping("/view/{page}")
+    public List<EmployeeSummary> viewAllEmployeeSummaries(@PathVariable int page, @PathParam("itemsPerPage") int itemsPerPage) {
+        List<Employee> employees = employeeService.findEmployeesByPage(page, itemsPerPage);
+        return employees.stream().sorted((a, b) -> a.getLastName().compareTo(b.getLastName())).map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
+    }
+
     @GetMapping("/viewByEmail")
     public EmployeeProfile viewEmployeeProfileByEmail(@PathParam("email") String email) {
         List<Employee> employees = employeeService.findAllEmployees();
@@ -65,12 +72,14 @@ public class HrController {
     public List<EmployeeProfile> viewEmployeeProfilesFilteringEmail(@PathParam("emailSeg") String emailSeg) {
         List<Employee> employees = employeeService.findAllEmployees();
         return employees.stream()
-                .filter(e -> isSeg(emailSeg, e.getLastName()) || isSeg(emailSeg, e.getFirstName()) || isSeg(emailSeg, e.getMiddleName()) || isSeg(emailSeg, e.getPreferredName()))
+                .filter(e -> isSeg(emailSeg, e.getEmail()))
                 .map(e -> new EmployeeProfile(e))
                 .collect(Collectors.toList());
     }
 
     private boolean isSeg(String s1, String s2) {
+        if (s1 == null) return true;
+        if (s2 == null) return false;
         int n1 = s1.length(), n2 = s2.length();
         for (int i = 0; i + n1 <= n2; i++) {
             String cur = s2.substring(i, i + n1);

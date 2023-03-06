@@ -1,9 +1,15 @@
 package com.example.employeeservice.domain.response;
 
 import com.example.employeeservice.domain.entity.Employee;
+import lombok.*;
 
 import java.util.Date;
-
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class Name {
     private String firstName;
     private String lastName;
