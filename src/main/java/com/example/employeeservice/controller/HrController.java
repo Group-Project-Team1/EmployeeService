@@ -77,6 +77,18 @@ public class HrController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/filterEmail")
+    public List<EmployeeProfile> findEmployeeProfilesFilteringEmail(@PathParam("emailSeg") String emailSeg) {
+        List<Employee> employees = employeeService.findEmployeesFilteringEmail(emailSeg);
+        return employees.stream().map(e -> new EmployeeProfile(e)).collect(Collectors.toList());
+    }
+
+    @GetMapping("/filterName")
+    public List<EmployeeProfile> findEmployeeProfilesFilteringName(@PathParam("nameSeg") String nameSeg) {
+        List<Employee> employees = employeeService.findEmployeesFilteringName(nameSeg);
+        return employees.stream().map(e -> new EmployeeProfile(e)).collect(Collectors.toList());
+    }
+
     private boolean isSeg(String s1, String s2) {
         if (s1 == null) return true;
         if (s2 == null) return false;

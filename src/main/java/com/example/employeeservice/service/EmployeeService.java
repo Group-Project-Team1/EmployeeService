@@ -4,6 +4,7 @@ import com.example.employeeservice.domain.entity.Contact;
 import com.example.employeeservice.domain.entity.Employee;
 import com.example.employeeservice.domain.entity.PersonalDocument;
 import com.example.employeeservice.domain.entity.VisaStatus;
+import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -76,5 +77,13 @@ public class EmployeeService {
         Sort sort = Sort.by(Sort.Direction.ASC, "lastName");
         Pageable pageable = PageRequest.of(page, itemsPerPage, sort);
         return pagingAndSortingRepo.findAll(pageable).getContent();
+    }
+
+    public List<Employee> findEmployeesFilteringEmail(String emailSeg) {
+        return employeeRepo.findByEmailContains(emailSeg);
+    }
+
+    public List<Employee> findEmployeesFilteringName(String nameSeg) {
+        return employeeRepo.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrMiddleNameContainingIgnoreCaseOrPreferredNameContainingIgnoreCase(nameSeg, nameSeg, nameSeg, nameSeg);
     }
 }

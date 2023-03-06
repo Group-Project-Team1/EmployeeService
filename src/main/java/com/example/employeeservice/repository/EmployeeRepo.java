@@ -13,7 +13,8 @@ public interface EmployeeRepo extends MongoRepository<Employee, Integer> {
 
     void deleteById(Integer id);
 
+    List<Employee> findByEmailContains(String emailSeg);
 
 
-
+    List<Employee> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrMiddleNameContainingIgnoreCaseOrPreferredNameContainingIgnoreCase(String name1, String name2, String name3, String name4);
 }
