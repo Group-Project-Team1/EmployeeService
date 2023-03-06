@@ -52,4 +52,17 @@ public class EmployeeService {
     public Employee findEmployeeById(int id) {
         return employeeRepo.findEmployeeById(id);
     }
+
+    public List<Employee> getAllEmployeesPaginated(int page, int size) {
+        List<Employee> employees = employeeRepo.findAll();
+        int n = employees.size();
+        int totalPages = (int) Math.floor((double)n /(double)size);
+        if (page > totalPages) {
+            throw new ArithmeticException("Exceed! Try smaller number of page.");
+        }
+        if (size > n) {
+            throw new ArithmeticException("Exceed! Try smaller number of size.");
+        }
+        return employees.subList(size * (page - 1), Math.min(size * page, n));
+    }
 }
