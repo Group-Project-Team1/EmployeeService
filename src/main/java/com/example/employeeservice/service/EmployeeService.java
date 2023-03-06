@@ -5,6 +5,7 @@ import com.example.employeeservice.domain.entity.Employee;
 import com.example.employeeservice.domain.entity.PersonalDocument;
 import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.domain.response.EmployeeProfile;
+import com.example.employeeservice.domain.response.VisaStatusResponse;
 import com.example.employeeservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -89,5 +91,22 @@ public class EmployeeService {
 
     public Employee findEmployeeByEmail(String email) {
         return employeeRepo.findEmployeeByEmail(email);
+    }
+
+    public List<VisaStatusResponse> findAllVisaStatusPaginated(int page, int size) {
+        List<Employee> employees = findAllEmployees();
+        List<VisaStatusResponse> visaStatusResponses = employees.stream()
+                .map(e -> e.getVisaStatuses().stream().map(v -> new VisaStatusResponse(e, v)).collect(Collectors.toList()))
+                .flatMap(l -> l.stream())
+                .collect(Collectors.toList());
+        int n = visaStatusResponses.size();
+        int totalPages = (int) Math.floor((double)n /(double)size);
+        if (page > totalPages) {
+            throw new ArithmeticException("Exceed! Try smaller number of page.");
+        }
+        if (size > n) {
+            throw new ArithmeticException("Exceed! Try smaller number of size.");
+        }
+        return visaStatusResponses.subList(size * (page - 1), Math.min(size * page, n));
     }
 }

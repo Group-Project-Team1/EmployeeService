@@ -1,6 +1,7 @@
 package com.example.employeeservice.controller;
 
 import com.example.employeeservice.domain.entity.Employee;
+import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.domain.response.EmployeeSummary;
 import com.example.employeeservice.domain.response.VisaStatusResponse;
@@ -28,12 +29,8 @@ public class HrController {
     }
 
     @GetMapping("/home")
-    public List<VisaStatusResponse> viewAllVisaStatus() {
-        List<Employee> employees = employeeService.findAllEmployees();
-        return employees.stream()
-                .map(e -> e.getVisaStatuses().stream().map(v -> new VisaStatusResponse(e, v)).collect(Collectors.toList()))
-                .flatMap(l -> l.stream())
-                .collect(Collectors.toList());
+    public List<VisaStatusResponse> viewAllVisaStatus(@PathParam("page") int page, @PathParam("itemsPerPage") int itemsPerPage) {
+        return employeeService.findAllVisaStatusPaginated(page, itemsPerPage);
     }
 
     // get -> find
