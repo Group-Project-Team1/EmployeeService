@@ -1,6 +1,6 @@
 package com.example.employeeservice.controller;
 
-import com.example.employeeservice.domain.Employee;
+import com.example.employeeservice.domain.*;
 import com.example.employeeservice.service.EmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,15 +32,23 @@ public class EmployeeController {
         return employeeService.findEmployeeById(id);
     }
 
+    @GetMapping("/findByEmail")
+    public Employee findEmployeeByEmail(@PathParam("email") String email) {
+        List<Employee> employees = employeeService.findAllEmployees();
+        return employees.stream().filter(e -> e.getEmail().equals(email)).findFirst().get();
+    }
+
     // post -> add
+    // avoid duplicate email
     @PostMapping("/add")
     @ApiOperation("save an employee to MongoDB")
     public void addEmployee(@RequestBody Employee employee) {
-        employeeService.saveEmployee(employee);
+        List<Employee> employees = employeeService.findAllEmployees();
+        Employee rep = employees.stream().filter(e -> e.getEmail().equals(employee.getEmail())).findFirst().orElseGet(() -> null);
+        if (rep == null) {
+            employeeService.saveEmployee(employee);
+        }
     }
-
-
-
 
     //put -> update
     @PutMapping("/update")
@@ -103,10 +111,37 @@ public class EmployeeController {
 //
 //    }
 //
-//    //add addresses, contacts
-//    public void add() {
-//
+    //add addresses, contacts, etc.
+//    @PostMapping("/addToList")
+//    public void addToList(@PathParam("id") Integer id, @RequestBody Object object) {
+//        System.out.println("dayin");
+//        System.out.println(object);
+//        System.out.println(object.getClass());
+//        Employee employee = employeeService.findEmployeeById(id);
+//        if (object instanceof Contact) {
+//            System.out.println((Contact)object);
+//            employee.getContacts().add((Contact) object);
+//        }
+//        else if (object instanceof Address) {
+//            employee.getAddresses().add((Address) object);
+//        }
+//        else if (object instanceof VisaStatus) {
+//            employee.getVisaStatuses().add((VisaStatus) object);
+//        }
+//        else if (object instanceof PersonalDocument) {
+//            employee.getPersonalDocuments().add((PersonalDocument) object);
+//        }
+//        employeeService.saveEmployee(employee);
 //    }
+
+    @PostMapping("/addContact")
+    public void addContact(@PathParam("id") Integer id, @RequestBody Contact contact) {
+        Employee employee = employeeService.findEmployeeById(id);
+        employee.getContacts().add(contact);
+        employeeService.saveEmployee(employee);
+    }
+
+
 //
 //    public void updateFile() {
 //

@@ -29,11 +29,11 @@ public class HrController {
         return employeeService.findAllEmployees();
     }
 
-//    public List<Employee> findAllEmployeesWithPagination() {
+//    public List<Employee> findAllEmployeesPaginated() {
 //        return employeeService.findAllEmployees();
 //    }
 //
-//    public List<Employee> findAllEmployeesWithFilters() {
+//    public List<Employee> findAllEmployeesFiltered() {
 //        return employeeService.findAllEmployees();
 //    }
 //
