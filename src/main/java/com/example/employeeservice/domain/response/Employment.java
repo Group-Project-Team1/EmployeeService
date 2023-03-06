@@ -3,6 +3,7 @@ package com.example.employeeservice.domain.response;
 import com.example.employeeservice.domain.entity.Employee;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -14,8 +15,8 @@ import java.util.stream.Collectors;
 @ToString
 public class Employment {
     private String visaTitle;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     public Employment(Employee employee) {
         this.visaTitle = employee.getVisaStatuses().stream()

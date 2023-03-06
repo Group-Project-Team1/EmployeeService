@@ -86,4 +86,8 @@ public class EmployeeService {
     public List<Employee> findEmployeesFilteringName(String nameSeg) {
         return employeeRepo.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrMiddleNameContainingIgnoreCaseOrPreferredNameContainingIgnoreCase(nameSeg, nameSeg, nameSeg, nameSeg);
     }
+
+    public Employee findEmployeeByEmail(String email) {
+        return employeeRepo.findEmployeeByEmail(email);
+    }
 }

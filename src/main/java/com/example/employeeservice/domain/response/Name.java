@@ -3,6 +3,7 @@ package com.example.employeeservice.domain.response;
 import com.example.employeeservice.domain.entity.Employee;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Getter
 @Setter
@@ -20,7 +21,7 @@ public class Name {
 
     private String email;
     private String ssn;
-    private Date dob;
+    private LocalDate dob;
     private String gender;
 
     public Name(Employee employee) {

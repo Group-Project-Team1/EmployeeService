@@ -3,6 +3,7 @@ package com.example.employeeservice.controller;
 import com.example.employeeservice.domain.entity.Employee;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.domain.response.EmployeeSummary;
+import com.example.employeeservice.domain.response.VisaStatusResponse;
 import com.example.employeeservice.service.EmployeeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,15 @@ public class HrController {
     @Autowired
     public HrController(EmployeeService employeeService) {
         this.employeeService = employeeService;
+    }
+
+    @GetMapping("/home")
+    public List<VisaStatusResponse> viewAllVisaStatus() {
+        List<Employee> employees = employeeService.findAllEmployees();
+        return employees.stream()
+                .map(e -> e.getVisaStatuses().stream().map(v -> new VisaStatusResponse(e, v)).collect(Collectors.toList()))
+                .flatMap(l -> l.stream())
+                .collect(Collectors.toList());
     }
 
     // get -> find

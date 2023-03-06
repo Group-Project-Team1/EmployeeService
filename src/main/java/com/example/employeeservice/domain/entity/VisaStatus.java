@@ -3,6 +3,7 @@ package com.example.employeeservice.domain.entity;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Document(collection = "visaStatus")
@@ -15,7 +16,9 @@ public class VisaStatus {
     private Integer id;
     private String visaType;
     private Boolean activeFlag;
-    private Date startDate;
-    private Date endDate;
-    private Date lastModificationDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private LocalDate lastModificationDate;
+    @ToString.Exclude
+    private Employee employee;
 }

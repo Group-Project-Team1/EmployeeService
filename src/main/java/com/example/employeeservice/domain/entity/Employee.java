@@ -3,6 +3,7 @@ package com.example.employeeservice.domain.entity;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,11 +25,11 @@ public class Employee {
     private String alternatePhone;
     private String gender;
     private String ssn;
-    private Date dob;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate dob;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String driverLicense;
-    private Date driverLicenseExpiration;
+    private LocalDate driverLicenseExpiration;
     private Integer houseId;
     private List<Contact> contacts;
     private List<Address> addresses;
