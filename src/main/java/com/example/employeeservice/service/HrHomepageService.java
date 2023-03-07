@@ -18,9 +18,11 @@ import java.util.stream.Collectors;
 @Service
 public class HrHomepageService {
 
-    @Autowired
-    private EmployeeRepo employeeRepo;
+    private final EmployeeRepo employeeRepo;
 
+    public HrHomepageService(EmployeeRepo employeeRepo) {
+        this.employeeRepo = employeeRepo;
+    }
 
     public List<VisaStatusResponse> findAllVisaStatusPaginated(int page, int size) {
         List<Employee> employees = employeeRepo.findAll();
@@ -35,6 +37,12 @@ public class HrHomepageService {
         }
         if (size > n) {
             throw new ArithmeticException("Exceed! Try smaller number of size.");
+        }
+        if (size <= 0) {
+            throw new ArithmeticException("There should be at least one item on each page!");
+        }
+        if (page <= 0) {
+            throw new ArithmeticException("The page number should be at least 1!");
         }
         return visaStatusResponses.subList(size * (page - 1), Math.min(size * page, n));
     }

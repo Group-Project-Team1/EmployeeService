@@ -13,8 +13,11 @@ import javax.websocket.server.PathParam;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
-    @Autowired
-    private EmployeeProfileService employeeProfileService;
+    private final EmployeeProfileService employeeProfileService;
+
+    public EmployeeController(EmployeeProfileService employeeProfileService) {
+        this.employeeProfileService = employeeProfileService;
+    }
 
     //6. c find profile by id
     @GetMapping("/findById")

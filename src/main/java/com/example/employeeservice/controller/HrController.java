@@ -17,17 +17,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/hr")
 public class HrController {
-    @Autowired
-    private HrHomepageService hrHomepageService;
+    private final HrHomepageService hrHomepageService;
 
-    @Autowired
-    private HrEmployeeProfilesService hrEmployeeProfilesService;
+    private final HrEmployeeProfilesService hrEmployeeProfilesService;
 
-    @Autowired
-    private HrHousingService hrHousingService;
+    private final HrHousingService hrHousingService;
+
+    public HrController(HrHomepageService hrHomepageService, HrEmployeeProfilesService hrEmployeeProfilesService, HrHousingService hrHousingService) {
+        this.hrHomepageService = hrHomepageService;
+        this.hrEmployeeProfilesService = hrEmployeeProfilesService;
+        this.hrHousingService = hrHousingService;
+    }
 
 
-    //3. Home Page
+    //3. Home Page. 1-indexed Paginated
     // TODO: exception to be handled
     @GetMapping("/home")
     public ResponseEntity<Object> findAllVisaStatus(@PathParam("page") int page, @PathParam("itemsPerPage") int itemsPerPage) {
@@ -51,7 +54,7 @@ public class HrController {
         );
     }
 
-    //4.b. summary view
+    //4.b. summary view. 1-indexed Paginated and sorted by last name
     @GetMapping("/view")
     public ResponseEntity<Object> findAllEmployeesSummaries(@PathParam("page") int page, @PathParam("itemsPerPage") int itemsPerPage) {
         List<EmployeeSummary> employeeSummaries = hrEmployeeProfilesService.findAllEmployeesSummaries(page - 1, itemsPerPage);
