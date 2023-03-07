@@ -110,14 +110,8 @@ public class EmployeeProfileService {
     // 这里结束
 
 
-    public List<EmployeeProfile> findEmployeeProfilesFilteredOnEmail(String emailSeg) {
-        return employeeRepo.findByEmailContains(emailSeg)
-                .stream().map(e -> new EmployeeProfile(e)).collect(Collectors.toList());
-    }
 
-    public List<EmployeeProfile> findEmployeeProfilesFilteredOnName(String nameSeg) {
-        return employeeRepo.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrMiddleNameContainingIgnoreCaseOrPreferredNameContainingIgnoreCase(nameSeg, nameSeg, nameSeg, nameSeg)
-                .stream().map(e -> new EmployeeProfile(e)).collect(Collectors.toList());
-    }
+
+
 
 }

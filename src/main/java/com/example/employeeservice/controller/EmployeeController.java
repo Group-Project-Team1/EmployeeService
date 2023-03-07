@@ -14,9 +14,9 @@ import javax.websocket.server.PathParam;
 @RequestMapping("/employee")
 public class EmployeeController {
     @Autowired
-    EmployeeProfileService employeeProfileService;
+    private EmployeeProfileService employeeProfileService;
 
-    //6. c
+    //6. c find profile by id
     @GetMapping("/findById")
     public ResponseEntity<Object> findEmployeeProfileById(@PathParam("id") Integer id) {
         EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileById(id);
@@ -27,7 +27,7 @@ public class EmployeeController {
         );
     }
 
-    //6. c
+    //6. c find profile by email
     @GetMapping("/findByEmail")
     public ResponseEntity<Object> findEmployeeProfileByEmail(@PathParam("email") String email) {
         EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileByEmail(email);
@@ -62,7 +62,6 @@ public class EmployeeController {
     }
 
     // 6.C. update profile - add to list
-
     @PostMapping("/addContact")
     public ResponseEntity<Object> addContact(@PathParam("id") Integer id, @RequestBody Contact contact) {
         employeeProfileService.addContact(id, contact);
