@@ -1,9 +1,6 @@
 package com.example.employeeservice.service;
 
-import com.example.employeeservice.domain.entity.Contact;
-import com.example.employeeservice.domain.entity.Employee;
-import com.example.employeeservice.domain.entity.PersonalDocument;
-import com.example.employeeservice.domain.entity.VisaStatus;
+import com.example.employeeservice.domain.entity.*;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.domain.response.EmployeeSummary;
 import com.example.employeeservice.domain.response.VisaStatusResponse;
@@ -15,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -126,4 +124,8 @@ public class EmployeeService {
     public List<VisaStatus> findAllVisaStatus() {
         return visaStatusRepo.findAll();
     }
+
+
+
+
 }

@@ -2,158 +2,104 @@ package com.example.employeeservice.controller;
 
 import com.example.employeeservice.domain.entity.*;
 import com.example.employeeservice.domain.response.EmployeeProfile;
-import com.example.employeeservice.service.EmployeeService;
-import io.swagger.annotations.ApiOperation;
+import com.example.employeeservice.domain.response.ResponseHandler;
+import com.example.employeeservice.service.EmployeeProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.websocket.server.PathParam;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/employee")
-//@Api(value = "EmployeeController RESTful endpoints")
 public class EmployeeController {
-
     @Autowired
-    EmployeeService employeeService;
+    EmployeeProfileService employeeProfileService;
 
-    // get -> find
-    @GetMapping("/find")
-    public Employee findEmployeeById(@PathParam("id") Integer id) {
-        return employeeService.findEmployeeById(id);
+    //6. c
+    @GetMapping("/findById")
+    public ResponseEntity<Object> findEmployeeProfileById(@PathParam("id") Integer id) {
+        EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileById(id);
+        return ResponseHandler.generateResponse(
+                "Found the employee profile.",
+                HttpStatus.OK,
+                employeeProfile
+        );
     }
 
-    @GetMapping("/viewProfile")
-    public EmployeeProfile viewProfileById(@PathParam("id") Integer id) {
-        return new EmployeeProfile(employeeService.findEmployeeById(id));
-    }
-
+    //6. c
     @GetMapping("/findByEmail")
-    public Employee findEmployeeByEmail(@PathParam("email") String email) {
-        List<Employee> employees = employeeService.findAllEmployees();
-        return employees.stream().filter(e -> e.getEmail().equals(email)).findFirst().get();
+    public ResponseEntity<Object> findEmployeeProfileByEmail(@PathParam("email") String email) {
+        EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileByEmail(email);
+        return ResponseHandler.generateResponse(
+                "Found the employee profile.",
+                HttpStatus.OK,
+                employeeProfile
+        );
     }
 
-    @GetMapping("/viewProfileByEmail")
-    public EmployeeProfile viewProfileByEmail(@PathParam("email") String email) {
-        Employee employee = employeeService.findEmployeeByEmail(email);
-        return new EmployeeProfile(employee);
+    //6.c. update an employee (profile)
+    @PutMapping("/updateEmployee")
+    public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
+        EmployeeProfile employeeProfile = employeeProfileService.updateEmployee(employee);
+        return ResponseHandler.generateResponse(
+                "Updated an employee successfully.",
+                HttpStatus.OK,
+                employeeProfile
+        );
     }
 
-    // post -> add
-    // avoid duplicate email
-    @PostMapping("/add")
-    @ApiOperation("save an employee to MongoDB")
-    public void addEmployee(@RequestBody Employee employee) {
-        List<Employee> employees = employeeService.findAllEmployees();
-        Employee rep = employees.stream().filter(e -> e.getEmail().equals(employee.getEmail())).findFirst().orElseGet(() -> null);
-        if (rep == null) {
-            employeeService.saveEmployee(employee);
-        }
-    }
-
-    //put -> update
+    //6.c. update profile
+    //todo: handle exceptions
     @PutMapping("/update")
-    public void updateProfile(@PathParam("id") Integer id, @PathParam("key") String key, @PathParam("val") String val) throws ParseException {
-        Employee employee = employeeService.findEmployeeById(id);
-        key = key.toLowerCase();
-        if (key.equals("firstname")) {
-            employee.setFirstName(val);
-        }
-        else if (key.equals("lastname")) {
-            employee.setLastName(val);
-        }
-        else if (key.equals("middlename")) {
-            employee.setMiddleName(val);
-        }
-        else if (key.equals("preferredname")) {
-            employee.setPreferredName(val);
-        }
-        else if (key.equals("email")) {
-            employee.setEmail(val);
-        }
-        else if (key.equals("cellphone")) {
-            employee.setCellPhone(val);
-        }
-        else if (key.equals("alternatephone")) {
-            employee.setAlternatePhone(val);
-        }
-        else if (key.equals("gender")) {
-            employee.setGender(val);
-        }
-        else if (key.equals("ssn")) {
-            employee.setSsn(val);
-        }
-        else if (key.equals("dob")) {
-            employee.setDriverLicenseExpiration(LocalDate.parse(val));
-        }
-        else if (key.equals("driverlicense")) {
-            employee.setDriverLicense(val);
-        }
-        else if (key.equals("driverlicenseexpiration")) {
-            employee.setDriverLicenseExpiration(LocalDate.parse(val));
-        }
-
-        employeeService.saveEmployee(employee);
+    public ResponseEntity<Object> updateProfile(@PathParam("id") Integer id, @PathParam("key") String key, @PathParam("val") String val) {
+        EmployeeProfile employeeProfile = employeeProfileService.updateProfile(id, key, val);
+        return ResponseHandler.generateResponse(
+                "Updated employee profile successfully.",
+                HttpStatus.OK,
+                employeeProfile
+        );
     }
 
-
-//    //update address, contact
-//    public void update() {
-//
-//    }
-//
-
+    // 6.C. update profile - add to list
 
     @PostMapping("/addContact")
-    public void addContact(@PathParam("id") Integer id, @RequestBody Contact contact) {
-        Employee employee = employeeService.findEmployeeById(id);
-        employee.getContacts().add(contact);
-        employeeService.saveEmployee(employee);
+    public ResponseEntity<Object> addContact(@PathParam("id") Integer id, @RequestBody Contact contact) {
+        employeeProfileService.addContact(id, contact);
+        return ResponseHandler.generateResponse(
+                "Added a contact successfully.",
+                HttpStatus.OK,
+                contact
+        );
     }
 
     @PostMapping("/addAddress")
-    public void addAddress(@PathParam("id") Integer id, @RequestBody Address address) {
-        Employee employee = employeeService.findEmployeeById(id);
-        employee.getAddresses().add(address);
-        employeeService.saveEmployee(employee);
+    public ResponseEntity<Object> addAddress(@PathParam("id") Integer id, @RequestBody Address address) {
+        employeeProfileService.addAddress(id, address);
+        return ResponseHandler.generateResponse(
+                "Added an address successfully.",
+                HttpStatus.OK,
+                address
+        );
     }
 
     @PostMapping("/addVisaStatus")
-    public void addVisaStatus(@PathParam("id") Integer id, @RequestBody VisaStatus visaStatus) {
-        Employee employee = employeeService.findEmployeeById(id);
-        employee.getVisaStatuses().add(visaStatus);
-        employeeService.saveEmployee(employee);
+    public ResponseEntity<Object> addVisaStatus(@PathParam("id") Integer id, @RequestBody VisaStatus visaStatus) {
+        employeeProfileService.addVisaStatus(id, visaStatus);
+        return ResponseHandler.generateResponse(
+                "Added a visaStatus successfully.",
+                HttpStatus.OK,
+                visaStatus
+        );
     }
 
     @PostMapping("/addPersonalDocument")
-    public void addPersonalDocument(@PathParam("id") Integer id, @RequestBody PersonalDocument personalDocument) {
-        Employee employee = employeeService.findEmployeeById(id);
-        employee.getPersonalDocuments().add(personalDocument);
-        employeeService.saveEmployee(employee);
+    public ResponseEntity<Object> addPersonalDocument(@PathParam("id") Integer id, @RequestBody PersonalDocument personalDocument) {
+        employeeProfileService.addPersonalDocument(id, personalDocument);
+        return ResponseHandler.generateResponse(
+                "Added a visaStatus successfully.",
+                HttpStatus.OK,
+                personalDocument
+        );
     }
-
-
-
-
-
-
-//
-//    public void updateFile() {
-//
-//    }
-//
-//    public void addFile() {
-//
-//    }
-//
-//    //delete -> remove
-
-
-
-
 }
