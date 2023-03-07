@@ -5,6 +5,7 @@ import com.example.employeeservice.domain.entity.Employee;
 import com.example.employeeservice.domain.entity.PersonalDocument;
 import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.domain.response.EmployeeProfile;
+import com.example.employeeservice.domain.response.EmployeeSummary;
 import com.example.employeeservice.domain.response.VisaStatusResponse;
 import com.example.employeeservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,10 +94,11 @@ public class EmployeeService {
         return employeeRepo.findEmployeeByEmail(email);
     }
 
+    //3. Home Page
     public List<VisaStatusResponse> findAllVisaStatusPaginated(int page, int size) {
         List<Employee> employees = findAllEmployees();
         List<VisaStatusResponse> visaStatusResponses = employees.stream()
-                .map(e -> e.getVisaStatuses().stream().map(v -> new VisaStatusResponse(e, v)).collect(Collectors.toList()))
+                .map(e -> e.getVisaStatuses().stream().filter(v -> v.getActiveFlag()).map(v -> new VisaStatusResponse(e, v)).collect(Collectors.toList()))
                 .flatMap(l -> l.stream())
                 .collect(Collectors.toList());
         int n = visaStatusResponses.size();
@@ -112,5 +114,16 @@ public class EmployeeService {
 
     public List<Employee> findEmployeesByHouseId(Integer houseId) {
         return employeeRepo.findEmployeesByHouseId(houseId);
+    }
+
+    public List<EmployeeSummary> findAllEmployeesSummaries(int page, int itemsPerPage) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "lastName");
+        Pageable pageable = PageRequest.of(page, itemsPerPage, sort);
+        List<Employee> employees = pagingAndSortingRepo.findAll(pageable).getContent();
+        return employees.stream().sorted((a, b) -> a.getLastName().compareTo(b.getLastName())).map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
+    }
+
+    public List<VisaStatus> findAllVisaStatus() {
+        return visaStatusRepo.findAll();
     }
 }

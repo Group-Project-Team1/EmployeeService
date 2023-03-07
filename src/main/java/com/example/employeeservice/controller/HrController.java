@@ -4,10 +4,15 @@ import com.example.employeeservice.domain.entity.Employee;
 import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.domain.response.EmployeeSummary;
+import com.example.employeeservice.domain.response.ResponseHandler;
 import com.example.employeeservice.domain.response.VisaStatusResponse;
+import com.example.employeeservice.service.EmployeeProfileService;
 import com.example.employeeservice.service.EmployeeService;
+import com.example.employeeservice.service.EmployeeSummaryService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,22 +26,37 @@ import java.util.stream.Collectors;
 @RequestMapping("/hr")
 public class HrController {
 
-    private final EmployeeService employeeService;
+    private EmployeeService employeeService;
+    private EmployeeProfileService employeeProfileService;
+    private EmployeeSummaryService employeeSummaryService;
 
     @Autowired
-    public HrController(EmployeeService employeeService) {
+    public HrController(EmployeeService employeeService, EmployeeProfileService employeeProfileService, EmployeeSummaryService employeeSummaryService) {
         this.employeeService = employeeService;
+        this.employeeProfileService = employeeProfileService;
+        this.employeeSummaryService = employeeSummaryService;
     }
 
+    //3. Home Page
+    // TODO: exception to be handled
     @GetMapping("/home")
-    public List<VisaStatusResponse> viewAllVisaStatus(@PathParam("page") int page, @PathParam("itemsPerPage") int itemsPerPage) {
-        return employeeService.findAllVisaStatusPaginated(page, itemsPerPage);
+    public ResponseEntity<Object> findAllVisaStatus(@PathParam("page") int page, @PathParam("itemsPerPage") int itemsPerPage) {
+        List<VisaStatusResponse> visaStatusResponses = employeeService.findAllVisaStatusPaginated(page, itemsPerPage);
+        return ResponseHandler.generateResponse(
+                "All active visa status.",
+                HttpStatus.OK,
+                visaStatusResponses
+        );
+    }
+
+    @GetMapping("/allVisa")
+    public List<VisaStatus> findAllVisaStatus() {
+        return employeeService.findAllVisaStatus();
     }
 
     // get -> find
     // find all employees (and HRs)
     @GetMapping("/findAll")
-    @ApiOperation(value = "get all employees", response = Iterable.class)
     public List<Employee> findAllEmployees() {
         return employeeService.findAllEmployees();
     }
@@ -55,17 +75,35 @@ public class HrController {
         return employees.stream().sorted((a, b) -> a.getLastName().compareTo(b.getLastName())).map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
     }
 
+    //4.b. summary view
     @GetMapping("/view/{page}")
-    public List<EmployeeSummary> viewAllEmployeeSummaries(@PathVariable int page, @PathParam("itemsPerPage") int itemsPerPage) {
-        List<Employee> employees = employeeService.findEmployeesByPage(page, itemsPerPage);
-        return employees.stream().sorted((a, b) -> a.getLastName().compareTo(b.getLastName())).map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
+    public ResponseEntity<Object> findAllEmployeesSummaries(@PathVariable int page, @PathParam("itemsPerPage") int itemsPerPage) {
+        List<EmployeeSummary> employeeSummaries = employeeService.findAllEmployeesSummaries(page, itemsPerPage);
+        return ResponseHandler.generateResponse(
+                "Page " + page + " of all employees' summary.",
+                HttpStatus.OK,
+                employeeSummaries
+        );
     }
 
-    @GetMapping("/viewByEmail")
-    public EmployeeProfile viewEmployeeProfileByEmail(@PathParam("email") String email) {
-        List<Employee> employees = employeeService.findAllEmployees();
-        return new EmployeeProfile(employees.stream().filter(e -> e.getEmail().equals(email)).findFirst().get());
+    // 4.b.1. enter the link to open a new tab that display the entire profile of an employee
+    @GetMapping("/findByEmail")
+    public ResponseEntity<Object> findEmployeeProfileByEmail(@PathParam("email") String email) {
+        EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileByEmail(email);
+        return ResponseHandler.generateResponse(
+                "Found the employee profile.",
+                HttpStatus.OK,
+                employeeProfile
+        );
     }
+
+
+//    @GetMapping("/findByEmail")
+//    public EmployeeProfile viewEmployeeProfileByEmail(@PathParam("email") String email) {
+//        List<Employee> employees = employeeService.findAllEmployees();
+//        return new EmployeeProfile(employees.stream().filter(e -> e.getEmail().equals(email)).findFirst().get());
+//    }
+
     @GetMapping("/viewFilteringName")
     public List<EmployeeProfile> viewEmployeeProfilesFilteringName(@PathParam("nameSeg") String nameSeg) {
         List<Employee> employees = employeeService.findAllEmployees();
@@ -84,17 +122,39 @@ public class HrController {
                 .collect(Collectors.toList());
     }
 
+    //4.c filtering employees profiles on email
     @GetMapping("/filterEmail")
-    public List<EmployeeProfile> findEmployeeProfilesFilteringEmail(@PathParam("emailSeg") String emailSeg) {
-        List<Employee> employees = employeeService.findEmployeesFilteringEmail(emailSeg);
-        return employees.stream().map(e -> new EmployeeProfile(e)).collect(Collectors.toList());
+    public ResponseEntity<Object> findEmployeeProfilesFilteredOnEmail(@PathParam("emailSeg") String emailSeg) {
+        List<EmployeeProfile> employeeProfiles = employeeProfileService.findEmployeeProfilesFilteredOnEmail(emailSeg);
+        return ResponseHandler.generateResponse(
+                "Found employee profiles filtered on the email segment provided.",
+                HttpStatus.OK,
+                employeeProfiles
+        );
     }
 
+//    @GetMapping("/filterEmail")
+//    public List<EmployeeProfile> findEmployeeProfilesFilteringEmail(@PathParam("emailSeg") String emailSeg) {
+//        List<Employee> employees = employeeService.findEmployeesFilteringEmail(emailSeg);
+//        return employees.stream().map(e -> new EmployeeProfile(e)).collect(Collectors.toList());
+//    }
+
+
+    //4.c filtering employees profiles on name (last name, first name, middle name, preferred name)
     @GetMapping("/filterName")
-    public List<EmployeeProfile> findEmployeeProfilesFilteringName(@PathParam("nameSeg") String nameSeg) {
-        List<Employee> employees = employeeService.findEmployeesFilteringName(nameSeg);
-        return employees.stream().map(e -> new EmployeeProfile(e)).collect(Collectors.toList());
+    public ResponseEntity<Object> findEmployeeProfilesFilteredOnName(@PathParam("nameSeg") String nameSeg) {
+        List<EmployeeProfile> employeeProfiles = employeeProfileService.findEmployeeProfilesFilteredOnName(nameSeg);
+        return ResponseHandler.generateResponse(
+                "Found employee profiles filtered on the name segment provided.",
+                HttpStatus.OK,
+                employeeProfiles
+        );
     }
+//    @GetMapping("/filterName")
+//    public List<EmployeeProfile> findEmployeeProfilesFilteringName(@PathParam("nameSeg") String nameSeg) {
+//        List<Employee> employees = employeeService.findEmployeesFilteringName(nameSeg);
+//        return employees.stream().map(e -> new EmployeeProfile(e)).collect(Collectors.toList());
+//    }
 
     private boolean isSeg(String s1, String s2) {
         if (s1 == null) return true;
@@ -107,10 +167,21 @@ public class HrController {
         return false;
     }
 
+    // 6.b.iii
     @GetMapping("/housing")
-    public List<EmployeeSummary> viewAllEmployeesByHouseId(@PathParam("houseId") Integer houseId) {
-        return employeeService.findEmployeesByHouseId(houseId).stream().map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
+    public ResponseEntity<Object> findEmployeeSummariesByHouseId(@PathParam("houseId") Integer houseId) {
+        List<EmployeeSummary> employeeSummaries = employeeSummaryService.findEmployeeSummariesByHouseId(houseId);
+        return ResponseHandler.generateResponse(
+                "Found " + employeeSummaries.size() + " employees of houseId " + houseId,
+                HttpStatus.OK,
+                employeeSummaries
+        );
     }
+
+//    @GetMapping("/housing")
+//    public List<EmployeeSummary> viewAllEmployeesByHouseId(@PathParam("houseId") Integer houseId) {
+//        return employeeService.findEmployeesByHouseId(houseId).stream().map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
+//    }
 
 
 //    public List<Employee> findAllEmployeesPaginated() {
