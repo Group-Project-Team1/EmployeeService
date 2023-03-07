@@ -1,5 +1,6 @@
 package com.example.employeeservice.controller;
 import com.example.employeeservice.domain.entity.Employee;
+import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.domain.response.EmployeeSummary;
 import com.example.employeeservice.domain.response.ResponseHandler;
@@ -51,9 +52,9 @@ public class HrController {
     }
 
     //4.b. summary view
-    @GetMapping("/view/{page}")
-    public ResponseEntity<Object> findAllEmployeesSummaries(@PathVariable int page, @PathParam("itemsPerPage") int itemsPerPage) {
-        List<EmployeeSummary> employeeSummaries = hrEmployeeProfilesService.findAllEmployeesSummaries(page, itemsPerPage);
+    @GetMapping("/view")
+    public ResponseEntity<Object> findAllEmployeesSummaries(@PathParam("page") int page, @PathParam("itemsPerPage") int itemsPerPage) {
+        List<EmployeeSummary> employeeSummaries = hrEmployeeProfilesService.findAllEmployeesSummaries(page - 1, itemsPerPage);
         return ResponseHandler.generateResponse(
                 "Page " + page + " of all employees' summary.",
                 HttpStatus.OK,

@@ -3,6 +3,7 @@ package com.example.employeeservice.domain.entity;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class Employee {
+    @Id
     private Integer id;
     private Integer userId;
     private String firstName;
