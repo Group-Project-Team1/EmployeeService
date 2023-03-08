@@ -112,7 +112,7 @@ public class HrController {
 
     // 6.b.iii
     @GetMapping("/housing")
-    public ResponseEntity<Object> findEmployeeSummariesByHouseId(@PathParam("houseId") Integer houseId) {
+    public ResponseEntity<Object> findEmployeeSummariesByHouseId(@RequestParam("houseId") Integer houseId) {
         List<EmployeeSummary> employeeSummaries = hrHousingService.findEmployeeSummariesByHouseId(houseId);
         return ResponseHandler.generateResponse(
                 "Found " + employeeSummaries.size() + " employees of houseId " + houseId,
