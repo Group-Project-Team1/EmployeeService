@@ -109,9 +109,8 @@ public class EmployeeProfileService {
 
     // 这里结束
 
-
-
-
-
+    public Employee findEmployeeById (Integer id){
+        return employeeRepo.findEmployeeById(id);
+    }
 
 }

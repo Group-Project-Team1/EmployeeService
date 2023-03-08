@@ -22,4 +22,5 @@ public interface EmployeeRepo extends MongoRepository<Employee, Integer> {
     Employee findEmployeeByEmail(String email);
 
     List<Employee> findEmployeesByHouseId(Integer houseId);
+
 }
