@@ -47,5 +47,4 @@ public class HrHomepageService {
         return visaStatusResponses.subList(size * (page - 1), Math.min(size * page, n));
     }
 
-
 }

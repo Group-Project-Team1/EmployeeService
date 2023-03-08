@@ -29,7 +29,6 @@ public class HrController {
         this.hrHousingService = hrHousingService;
     }
 
-
     //3. Home Page. 1-indexed Paginated
     // TODO: exception to be handled
     @GetMapping("/home")
