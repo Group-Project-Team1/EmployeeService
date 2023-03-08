@@ -10,6 +10,8 @@ import java.util.List;
 @Builder
 public class AuthUserDetail implements UserDetails {
 
+    private Integer userId;
+    private String email;
     private String username;
     private String password;
     private boolean accountNonExpired;
@@ -17,6 +19,10 @@ public class AuthUserDetail implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
     private List<GrantedAuthority> authorities;
+
+    public Integer getUserId() {
+        return this.userId;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

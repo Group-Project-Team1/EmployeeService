@@ -55,7 +55,7 @@ public class HrController {
 
     //4.b. summary view. 1-indexed Paginated and sorted by last name
     @GetMapping("/view")
-    public ResponseEntity<Object> findAllEmployeesSummaries(@PathParam("page") int page, @PathParam("itemsPerPage") int itemsPerPage) {
+    public ResponseEntity<Object> findAllEmployeesSummaries(@PathParam("page") Integer page, @PathParam("itemsPerPage") Integer itemsPerPage) {
         List<EmployeeSummary> employeeSummaries = hrEmployeeProfilesService.findAllEmployeesSummaries(page - 1, itemsPerPage);
         return ResponseHandler.generateResponse(
                 "Page " + page + " of all employees' summary.",

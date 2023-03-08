@@ -30,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (authUserDetailOptional.isPresent()){
             AuthUserDetail authUserDetail = authUserDetailOptional.get();
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    authUserDetail.getUsername(),
+                    authUserDetail.getUserId(), // ***** change here: from extracting username to userId *****
                     null,
                     authUserDetail.getAuthorities()
             ); // generate authentication object
