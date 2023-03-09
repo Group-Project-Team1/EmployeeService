@@ -1,6 +1,5 @@
 package com.example.employeeservice.controller;
 import com.example.employeeservice.domain.entity.Employee;
-import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.domain.response.EmployeeSummary;
 import com.example.employeeservice.domain.response.ResponseHandler;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.websocket.server.PathParam;
 import java.util.List;
 
@@ -23,6 +21,7 @@ public class HrController {
 
     private final HrHousingService hrHousingService;
 
+    @Autowired
     public HrController(HrHomepageService hrHomepageService, HrEmployeeProfilesService hrEmployeeProfilesService, HrHousingService hrHousingService) {
         this.hrHomepageService = hrHomepageService;
         this.hrEmployeeProfilesService = hrEmployeeProfilesService;
@@ -30,10 +29,8 @@ public class HrController {
     }
 
     //3. Home Page. 1-indexed Paginated
-    // TODO: exception to be handled
     @GetMapping("/home")
     public ResponseEntity<Object> findAllVisaStatus(@PathParam("page") Integer page, @PathParam("itemsPerPage") Integer itemsPerPage) {
-        System.out.println("开始");
         List<VisaStatusResponse> visaStatusResponses = hrHomepageService.findAllVisaStatusPaginated(page, itemsPerPage);
         return ResponseHandler.generateResponse(
                 "All active visa status.",
@@ -65,17 +62,15 @@ public class HrController {
         );
     }
 
-
     @GetMapping("/findById")
-    public ResponseEntity<Object> findEmployeeProfileById(@PathParam("id") Integer id) {
-        EmployeeProfile employeeProfile = hrEmployeeProfilesService.findEmployeeProfileById(id);
+    public ResponseEntity<Object> findEmployeeById(@PathParam("id") Integer id) {
+        Employee employee = hrEmployeeProfilesService.findEmployeeById(id);
         return ResponseHandler.generateResponse(
-                "Found the employee profile.",
+                "Found the employee.",
                 HttpStatus.OK,
-                employeeProfile
+                employee
         );
     }
-
 
     // 4.b.1. enter the link to open a new tab that display the entire profile of an employee
     @GetMapping("/findByEmail")

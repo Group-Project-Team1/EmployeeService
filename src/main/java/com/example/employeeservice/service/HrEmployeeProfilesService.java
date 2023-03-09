@@ -10,18 +10,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class HrEmployeeProfilesService {
 
     @Autowired
-    private EmployeeRepo employeeRepo;
+    public EmployeeRepo employeeRepo;
 
     @Autowired
-    private PagingAndSortingRepo pagingAndSortingRepo;
+    public PagingAndSortingRepo pagingAndSortingRepo;
 
     public void saveEmployee(Employee employee) {
         employeeRepo.save(employee);
@@ -40,11 +40,12 @@ public class HrEmployeeProfilesService {
         return employees.stream().sorted((a, b) -> a.getLastName().compareTo(b.getLastName())).map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
     }
 
-    public EmployeeProfile findEmployeeProfileById(Integer id) {
-        return new EmployeeProfile(employeeRepo.findEmployeeById(id));
-    }
     public EmployeeProfile findEmployeeProfileByEmail(String email) {
-        return new EmployeeProfile(employeeRepo.findEmployeeByEmail(email));
+        Employee employee = employeeRepo.findEmployeeByEmail(email);
+        if (employee == null) {
+            throw new NullPointerException("The user is not existing");
+        }
+        return new EmployeeProfile(employee);
     }
 
     public List<EmployeeProfile> findEmployeeProfilesFilteredOnEmail(String emailSeg) {
@@ -58,4 +59,11 @@ public class HrEmployeeProfilesService {
     }
 
 
+    public Employee findEmployeeById(Integer id) {
+        Optional<Employee> employeeOptional = employeeRepo.findById(id);
+        if (!employeeOptional.isPresent()) {
+            throw new NullPointerException("The user is not existing");
+        }
+        return employeeOptional.get();
+    }
 }

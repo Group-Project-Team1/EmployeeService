@@ -34,9 +34,15 @@ public class Employee {
     private String driverLicense;
     private LocalDate driverLicenseExpiration;
     private Integer houseId;
-    private List<Contact> contacts;
-    private List<Address> addresses;
-    private List<VisaStatus> visaStatuses;
+    private List<Contact> contacts = new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
+    private List<VisaStatus> visaStatuses = new ArrayList<>();
     private List<PersonalDocument> personalDocuments = new ArrayList<>();
+
+    public Employee(String firstName, String lastName, String email, Integer houseId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.houseId = houseId;
+    }
 
 }

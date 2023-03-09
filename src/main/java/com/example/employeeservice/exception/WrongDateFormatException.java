@@ -1,6 +1,4 @@
-package com.example.employeeservice.Exception;
-
-import java.time.format.DateTimeParseException;
+package com.example.employeeservice.exception;
 
 public class WrongDateFormatException extends RuntimeException {
     public WrongDateFormatException(String message) {
