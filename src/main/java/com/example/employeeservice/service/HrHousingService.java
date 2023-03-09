@@ -1,5 +1,6 @@
 package com.example.employeeservice.service;
 
+import com.example.employeeservice.Exception.BadInputException;
 import com.example.employeeservice.domain.response.EmployeeSummary;
 import com.example.employeeservice.repository.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -27,7 +27,7 @@ public class EmployeeController {
 
     //6. c find profile by id
     @GetMapping("/findById")
-    public ResponseEntity<Object> findEmployeeProfileById(@PathParam("id") Integer id) {
+    public ResponseEntity<Object> findEmployeeProfileById(@PathParam("id") String id) {
         EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileById(id);
         return ResponseHandler.generateResponse(
                 "Found the employee profile.",
@@ -35,7 +35,6 @@ public class EmployeeController {
                 employeeProfile
         );
     }
-
 
     //6.c. update an employee (profile)
     @PostMapping("/updateEmployee")

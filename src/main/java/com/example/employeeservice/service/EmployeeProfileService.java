@@ -1,5 +1,6 @@
 package com.example.employeeservice.service;
 
+import com.example.employeeservice.Exception.BadInputException;
 import com.example.employeeservice.Exception.CannotAccessOtherUsersDataException;
 import com.example.employeeservice.Exception.WrongDateFormatException;
 import com.example.employeeservice.domain.entity.*;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,9 +36,19 @@ public class EmployeeProfileService {
         return new EmployeeProfile(employee);
     }
 
-    public EmployeeProfile findEmployeeProfileById(Integer id) {
+    public EmployeeProfile findEmployeeProfileById(String id) {
+        try {
+            Integer.parseInt(id);
+        } catch (Exception e) {
+            throw new BadInputException("Please input an integer!");
+        }
+        int employeeId = Integer.valueOf(id);
         int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Employee employee = employeeRepo.findById(id).get();
+        Optional<Employee> employeeOptional = employeeRepo.findById(employeeId);
+        if (!employeeOptional.isPresent()) {
+            throw new NullPointerException("The user is not existing");
+        }
+        Employee employee = employeeOptional.get();
         if (employee.getUserId() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot view the profile of other employee.");
         }
@@ -45,7 +57,11 @@ public class EmployeeProfileService {
 
     public EmployeeProfile updateProfile(Integer id, String key, String val) {
         int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Employee employee = employeeRepo.findById(id).get();
+        Optional<Employee> employeeOptional = employeeRepo.findById(id);
+        if (!employeeOptional.isPresent()) {
+            throw new NullPointerException("The user is not existing");
+        }
+        Employee employee = employeeOptional.get();
         if (employee.getUserId() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot update the profile of other employee.");
         }
@@ -102,7 +118,11 @@ public class EmployeeProfileService {
 
 
     public void addContact(Integer id, Contact contact) {
-        Employee employee = employeeRepo.findById(id).get();
+        Optional<Employee> employeeOptional = employeeRepo.findById(id);
+        if (!employeeOptional.isPresent()) {
+            throw new NullPointerException("The user is not existing");
+        }
+        Employee employee = employeeOptional.get();
         int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (employee.getUserId() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot update the profile of other employee.");
@@ -112,7 +132,11 @@ public class EmployeeProfileService {
     }
 
     public void addAddress(Integer id, Address address) {
-        Employee employee = employeeRepo.findById(id).get();
+        Optional<Employee> employeeOptional = employeeRepo.findById(id);
+        if (!employeeOptional.isPresent()) {
+            throw new NullPointerException("The user is not existing");
+        }
+        Employee employee = employeeOptional.get();
         int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (employee.getUserId() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot update the profile of other employee.");
@@ -122,7 +146,11 @@ public class EmployeeProfileService {
     }
 
     public void addVisaStatus(Integer id, VisaStatus visaStatus) {
-        Employee employee = employeeRepo.findById(id).get();
+        Optional<Employee> employeeOptional = employeeRepo.findById(id);
+        if (!employeeOptional.isPresent()) {
+            throw new NullPointerException("The user is not existing");
+        }
+        Employee employee = employeeOptional.get();
         int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (employee.getUserId() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot update the profile of other employee.");
@@ -132,7 +160,11 @@ public class EmployeeProfileService {
     }
 
     public void addPersonalDocument(Integer id, PersonalDocument personalDocument) {
-        Employee employee = employeeRepo.findById(id).get();
+        Optional<Employee> employeeOptional = employeeRepo.findById(id);
+        if (!employeeOptional.isPresent()) {
+            throw new NullPointerException("The user is not existing");
+        }
+        Employee employee = employeeOptional.get();
         int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (employee.getUserId() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot update the profile of other employee.");
@@ -144,7 +176,11 @@ public class EmployeeProfileService {
     // 这里结束
 
     public Employee findEmployeeById (Integer id){
-        Employee employee = employeeRepo.findById(id).get();
+        Optional<Employee> employeeOptional = employeeRepo.findById(id);
+        if (!employeeOptional.isPresent()) {
+            throw new NullPointerException("The user is not existing");
+        }
+        Employee employee = employeeOptional.get();
         int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (employee.getUserId() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot access the profile of other employee.");

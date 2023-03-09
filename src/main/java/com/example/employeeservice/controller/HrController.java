@@ -30,7 +30,6 @@ public class HrController {
     }
 
     //3. Home Page. 1-indexed Paginated
-    // TODO: exception to be handled
     @GetMapping("/home")
     public ResponseEntity<Object> findAllVisaStatus(@PathParam("page") Integer page, @PathParam("itemsPerPage") Integer itemsPerPage) {
         System.out.println("开始");
@@ -67,12 +66,12 @@ public class HrController {
 
 
     @GetMapping("/findById")
-    public ResponseEntity<Object> findEmployeeProfileById(@PathParam("id") Integer id) {
-        EmployeeProfile employeeProfile = hrEmployeeProfilesService.findEmployeeProfileById(id);
+    public ResponseEntity<Object> findEmployeeById(@PathParam("id") Integer id) {
+        Employee employee = hrEmployeeProfilesService.findEmployeeById(id);
         return ResponseHandler.generateResponse(
-                "Found the employee profile.",
+                "Found the employee.",
                 HttpStatus.OK,
-                employeeProfile
+                employee
         );
     }
 
