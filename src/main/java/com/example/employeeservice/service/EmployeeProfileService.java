@@ -1,6 +1,7 @@
 package com.example.employeeservice.service;
 
 import com.example.employeeservice.Exception.CannotAccessOtherUsersDataException;
+import com.example.employeeservice.Exception.WrongDateFormatException;
 import com.example.employeeservice.domain.entity.*;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.repository.EmployeeRepo;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,13 +81,21 @@ public class EmployeeProfileService {
             employee.setSsn(val);
         }
         else if (key.equals("dob")) {
-            employee.setDriverLicenseExpiration(LocalDate.parse(val));
+            try {
+                employee.setDob(LocalDate.parse(val));
+            } catch (Exception e) {
+                throw new WrongDateFormatException("Please input the date as 'yyyy-MM-dd' format!");
+            }
         }
         else if (key.equals("driverlicense")) {
             employee.setDriverLicense(val);
         }
         else if (key.equals("driverlicenseexpiration")) {
-            employee.setDriverLicenseExpiration(LocalDate.parse(val));
+            try {
+                employee.setDriverLicenseExpiration(LocalDate.parse(val));
+            } catch (Exception e) {
+                throw new WrongDateFormatException("Please input the date as 'yyyy-MM-dd' format!");
+            }
         }
         employeeRepo.save(employee);
         return new EmployeeProfile(employee);
