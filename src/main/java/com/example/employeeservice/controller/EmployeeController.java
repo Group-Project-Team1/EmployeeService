@@ -40,6 +40,7 @@ public class EmployeeController {
 
     //6.c. update an employee (profile)
     @PostMapping("/updateEmployee")
+    @PreAuthorize("hasAuthority('employee')")
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         EmployeeProfile employeeProfile = employeeProfileService.updateEmployee(employee);
         return ResponseHandler.generateResponse(
