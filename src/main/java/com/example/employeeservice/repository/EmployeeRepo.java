@@ -10,12 +10,8 @@ import java.util.List;
 @Repository
 public interface EmployeeRepo extends MongoRepository<Employee, Integer> {
 
-    Employee findEmployeeById(Integer id);
-
-    void deleteById(Integer id);
 
     List<Employee> findByEmailContains(String emailSeg);
-
 
     List<Employee> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrMiddleNameContainingIgnoreCaseOrPreferredNameContainingIgnoreCase(String name1, String name2, String name3, String name4);
 
@@ -23,4 +19,5 @@ public interface EmployeeRepo extends MongoRepository<Employee, Integer> {
 
     List<Employee> findEmployeesByHouseId(Integer houseId);
 
+    Employee findEmployeeByUserId(int userId);
 }

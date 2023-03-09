@@ -41,7 +41,7 @@ public class HrEmployeeProfilesService {
     }
 
     public EmployeeProfile findEmployeeProfileById(Integer id) {
-        return new EmployeeProfile(employeeRepo.findEmployeeById(id));
+        return new EmployeeProfile(employeeRepo.findById(id).get());
     }
     public EmployeeProfile findEmployeeProfileByEmail(String email) {
         return new EmployeeProfile(employeeRepo.findEmployeeByEmail(email));

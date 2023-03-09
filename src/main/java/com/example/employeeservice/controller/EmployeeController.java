@@ -59,17 +59,6 @@ public class EmployeeController {
         );
     }
 
-    // 6.c update profile of the employee whose userId equals the one extracted from token
-    @PutMapping("/updateProfile")
-    public ResponseEntity<Object> updateProfile(@PathParam("key") String key, @PathParam("val") String val) {
-        EmployeeProfile employeeProfile = employeeProfileService.updateProfile(key, val);
-        return ResponseHandler.generateResponse(
-                "Updated employee profile successfully.",
-                HttpStatus.OK,
-                employeeProfile
-        );
-    }
-
     // 6.C. update profile - add to list
     @PostMapping("/addContact")
     public ResponseEntity<Object> addContact(@PathParam("id") Integer id, @RequestBody Contact contact) {
