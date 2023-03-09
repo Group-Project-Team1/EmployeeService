@@ -38,7 +38,7 @@ public class EmployeeController {
 
 
     //6.c. update an employee (profile)
-    @PutMapping("/updateEmployee")
+    @PostMapping("/updateEmployee")
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         EmployeeProfile employeeProfile = employeeProfileService.updateEmployee(employee);
         return ResponseHandler.generateResponse(
