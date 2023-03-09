@@ -7,6 +7,9 @@ import com.example.employeeservice.security.JwtProvider;
 import com.example.employeeservice.service.EmployeeProfileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import javax.websocket.server.PathParam;
 
@@ -32,6 +35,7 @@ public class EmployeeController {
 
     //6.c. update an employee (profile)
     @PostMapping("/updateEmployee")
+    @PreAuthorize("hasAuthority('employee')")
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         EmployeeProfile employeeProfile = employeeProfileService.updateEmployee(employee);
         return ResponseHandler.generateResponse(
@@ -84,6 +88,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/{id}/addPersonalDocument")
+    @PreAuthorize("hasAuthority('employee')")
     public ResponseEntity<Object> addPersonalDocument(@PathVariable("id") Integer id, @RequestBody PersonalDocument personalDocument) {
         employeeProfileService.addPersonalDocument(id, personalDocument);
         return ResponseHandler.generateResponse(
@@ -94,6 +99,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employeeId}")
+    @PreAuthorize("hasAuthority('employee')")
     public Employee findEmployeeById(@PathVariable Integer employeeId){
         return employeeProfileService.findEmployeeById(employeeId);
     }
