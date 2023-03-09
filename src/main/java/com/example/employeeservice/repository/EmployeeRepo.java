@@ -23,5 +23,4 @@ public interface EmployeeRepo extends MongoRepository<Employee, Integer> {
 
     List<Employee> findEmployeesByHouseId(Integer houseId);
 
-    Employee findEmployeeByUserId(int userId);
 }

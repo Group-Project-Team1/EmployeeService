@@ -101,13 +101,20 @@ public class EmployeeController {
         );
     }
 
-    @PostMapping("/addPersonalDocument")
-    public ResponseEntity<Object> addPersonalDocument(@PathParam("id") Integer id, @RequestBody PersonalDocument personalDocument) {
+    @PostMapping("/{id}/addPersonalDocument")
+    public ResponseEntity<Object> addPersonalDocument(@PathVariable("id") Integer id, @RequestBody PersonalDocument personalDocument) {
         employeeProfileService.addPersonalDocument(id, personalDocument);
         return ResponseHandler.generateResponse(
-                "Added a visaStatus successfully.",
+                "Added a document successfully.",
                 HttpStatus.OK,
                 personalDocument
         );
     }
+
+    @GetMapping("/{employeeId}")
+    public Employee findEmployeeById(@PathVariable Integer employeeId){
+        return employeeProfileService.findEmployeeById(employeeId);
+    }
+
+
 }

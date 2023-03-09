@@ -39,5 +39,4 @@ public class Employee {
     private List<VisaStatus> visaStatuses;
     private List<PersonalDocument> personalDocuments = new ArrayList<>();
 
-
 }
