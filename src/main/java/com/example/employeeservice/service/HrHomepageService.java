@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,19 +25,22 @@ public class HrHomepageService {
         this.employeeRepo = employeeRepo;
     }
 
-    public List<VisaStatusResponse> findAllVisaStatusPaginated(int page, int size) {
+    public List<VisaStatusResponse> findAllVisaStatusPaginated(Integer page, Integer size) {
+        if (page == null || size == null) {
+            throw new NullPointerException("Please input the page number and itemsPerPage!");
+        }
         List<Employee> employees = employeeRepo.findAll();
         List<VisaStatusResponse> visaStatusResponses = employees.stream()
                 .map(e -> e.getVisaStatuses().stream().filter(v -> v.getActiveFlag()).map(v -> new VisaStatusResponse(e, v)).collect(Collectors.toList()))
                 .flatMap(l -> l.stream())
                 .collect(Collectors.toList());
         int n = visaStatusResponses.size();
-        int totalPages = (int) Math.floor((double)n /(double)size);
-        if (page > totalPages) {
-            throw new ArithmeticException("Exceed! Try smaller number of page.");
-        }
         if (size > n) {
-            throw new ArithmeticException("Exceed! Try smaller number of size.");
+            size = n;
+        }
+        int totalPages = (int) Math.ceil((double)n /(double)size);
+        if (page > totalPages) {
+            return new ArrayList<>();
         }
         if (size <= 0) {
             throw new ArithmeticException("There should be at least one item on each page!");
@@ -46,6 +50,5 @@ public class HrHomepageService {
         }
         return visaStatusResponses.subList(size * (page - 1), Math.min(size * page, n));
     }
-
 
 }

@@ -3,19 +3,25 @@ package com.example.employeeservice.controller;
 import com.example.employeeservice.domain.entity.*;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.domain.response.ResponseHandler;
+import com.example.employeeservice.security.AuthUserDetail;
+import com.example.employeeservice.security.JwtProvider;
 import com.example.employeeservice.service.EmployeeProfileService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import javax.websocket.server.PathParam;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
     private final EmployeeProfileService employeeProfileService;
 
-    public EmployeeController(EmployeeProfileService employeeProfileService) {
+    public EmployeeController(EmployeeProfileService employeeProfileService, JwtProvider jwtProvider) {
         this.employeeProfileService = employeeProfileService;
     }
 
@@ -30,16 +36,6 @@ public class EmployeeController {
         );
     }
 
-    //6. c find profile by email
-    @GetMapping("/findByEmail")
-    public ResponseEntity<Object> findEmployeeProfileByEmail(@PathParam("email") String email) {
-        EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileByEmail(email);
-        return ResponseHandler.generateResponse(
-                "Found the employee profile.",
-                HttpStatus.OK,
-                employeeProfile
-        );
-    }
 
     //6.c. update an employee (profile)
     @PostMapping("/updateEmployee")
@@ -53,10 +49,20 @@ public class EmployeeController {
     }
 
     //6.c. update profile
-    //todo: handle exceptions
     @PutMapping("/update")
     public ResponseEntity<Object> updateProfile(@PathParam("id") Integer id, @PathParam("key") String key, @PathParam("val") String val) {
         EmployeeProfile employeeProfile = employeeProfileService.updateProfile(id, key, val);
+        return ResponseHandler.generateResponse(
+                "Updated employee profile successfully.",
+                HttpStatus.OK,
+                employeeProfile
+        );
+    }
+
+    // 6.c update profile of the employee whose userId equals the one extracted from token
+    @PutMapping("/updateProfile")
+    public ResponseEntity<Object> updateProfile(@PathParam("key") String key, @PathParam("val") String val) {
+        EmployeeProfile employeeProfile = employeeProfileService.updateProfile(key, val);
         return ResponseHandler.generateResponse(
                 "Updated employee profile successfully.",
                 HttpStatus.OK,
