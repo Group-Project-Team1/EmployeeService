@@ -10,6 +10,7 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -102,6 +103,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/{id}/addPersonalDocument")
+    @PreAuthorize("hasAuthority('employee')")
     public ResponseEntity<Object> addPersonalDocument(@PathVariable("id") Integer id, @RequestBody PersonalDocument personalDocument) {
         employeeProfileService.addPersonalDocument(id, personalDocument);
         return ResponseHandler.generateResponse(
@@ -112,6 +114,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employeeId}")
+    @PreAuthorize("hasAuthority('employee')")
     public Employee findEmployeeById(@PathVariable Integer employeeId){
         return employeeProfileService.findEmployeeById(employeeId);
     }
