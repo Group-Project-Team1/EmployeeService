@@ -103,7 +103,7 @@ public class EmployeeProfileService {
 
     public EmployeeProfile updateProfile(String key, String val) {
         int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Employee employee = employeeRepo.findEmployeeByUserId(userId);
+        Employee employee = employeeRepo.findEmployeeById(userId);
         key = key.replace(" ", "");
         key = key.toLowerCase();
         if (key.equals("firstname")) {
