@@ -39,4 +39,10 @@ public class Employee {
     private List<VisaStatus> visaStatuses = new ArrayList<>();
     private List<PersonalDocument> personalDocuments = new ArrayList<>();
 
+    public Employee(String firstName, String lastName, String email, Integer houseId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.houseId = houseId;
+    }
+
 }

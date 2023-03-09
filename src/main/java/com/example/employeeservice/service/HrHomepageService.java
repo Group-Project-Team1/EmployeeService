@@ -1,17 +1,9 @@
 package com.example.employeeservice.service;
 
 import com.example.employeeservice.domain.entity.Employee;
-import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.domain.response.VisaStatusResponse;
 import com.example.employeeservice.repository.EmployeeRepo;
-import org.hibernate.hql.internal.ast.tree.AggregateNode;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,5 +42,4 @@ public class HrHomepageService {
         }
         return visaStatusResponses.subList(size * (page - 1), Math.min(size * page, n));
     }
-
 }

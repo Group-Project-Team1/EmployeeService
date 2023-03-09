@@ -1,21 +1,16 @@
 package com.example.employeeservice.service;
 
-import com.example.employeeservice.Exception.BadInputException;
-import com.example.employeeservice.Exception.CannotAccessOtherUsersDataException;
-import com.example.employeeservice.Exception.WrongDateFormatException;
+import com.example.employeeservice.exception.BadInputException;
+import com.example.employeeservice.exception.CannotAccessOtherUsersDataException;
+import com.example.employeeservice.exception.WrongDateFormatException;
 import com.example.employeeservice.domain.entity.*;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.repository.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeProfileService {
@@ -115,8 +110,6 @@ public class EmployeeProfileService {
         return new EmployeeProfile(employee);
     }
 
-
-
     public void addContact(Integer id, Contact contact) {
         Optional<Employee> employeeOptional = employeeRepo.findById(id);
         if (!employeeOptional.isPresent()) {
@@ -172,9 +165,6 @@ public class EmployeeProfileService {
         employee.getPersonalDocuments().add(personalDocument);
         employeeRepo.save(employee);
     }
-
-    // 这里结束
-
     public Employee findEmployeeById (Integer id){
         Optional<Employee> employeeOptional = employeeRepo.findById(id);
         if (!employeeOptional.isPresent()) {
@@ -187,5 +177,4 @@ public class EmployeeProfileService {
         }
         return employee;
     }
-
 }

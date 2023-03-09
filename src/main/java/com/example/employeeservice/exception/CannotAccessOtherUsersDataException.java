@@ -1,4 +1,4 @@
-package com.example.employeeservice.Exception;
+package com.example.employeeservice.exception;
 
 public class CannotAccessOtherUsersDataException extends RuntimeException {
     public CannotAccessOtherUsersDataException(String message) {

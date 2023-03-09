@@ -1,11 +1,9 @@
 package com.example.employeeservice.service;
 
-import com.example.employeeservice.Exception.BadInputException;
 import com.example.employeeservice.domain.response.EmployeeSummary;
 import com.example.employeeservice.repository.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

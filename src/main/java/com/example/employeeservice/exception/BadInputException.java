@@ -1,4 +1,4 @@
-package com.example.employeeservice.Exception;
+package com.example.employeeservice.exception;
 
 public class BadInputException extends RuntimeException{
     public BadInputException(String message) {
