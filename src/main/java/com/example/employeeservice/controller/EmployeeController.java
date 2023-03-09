@@ -43,8 +43,8 @@ public class EmployeeController {
 
     //6.c. update profile
     @PutMapping("/update")
-    public ResponseEntity<Object> updateProfile(@PathParam("id") Integer id, @PathParam("key") String key, @PathParam("val") String val) {
-        EmployeeProfile employeeProfile = employeeProfileService.updateProfile(id, key, val);
+    public ResponseEntity<Object> updateProfile(@PathParam("userId") Integer userId, @PathParam("key") String key, @PathParam("val") String val) {
+        EmployeeProfile employeeProfile = employeeProfileService.updateProfile(userId, key, val);
         return ResponseHandler.generateResponse(
                 "Updated employee profile successfully.",
                 HttpStatus.OK,

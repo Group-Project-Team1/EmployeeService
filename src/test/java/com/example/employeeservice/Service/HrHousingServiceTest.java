@@ -1,8 +1,9 @@
-package com.example.employeeservice.service;
+package com.example.employeeservice.Service;
 
 import com.example.employeeservice.domain.entity.Employee;
 import com.example.employeeservice.domain.response.EmployeeSummary;
 import com.example.employeeservice.repository.EmployeeRepo;
+import com.example.employeeservice.service.HrHousingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

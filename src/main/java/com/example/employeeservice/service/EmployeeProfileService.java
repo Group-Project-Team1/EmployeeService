@@ -2,14 +2,17 @@ package com.example.employeeservice.service;
 
 import com.example.employeeservice.exception.BadInputException;
 import com.example.employeeservice.exception.CannotAccessOtherUsersDataException;
+import com.example.employeeservice.exception.DuplicateIdException;
 import com.example.employeeservice.exception.WrongDateFormatException;
 import com.example.employeeservice.domain.entity.*;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.repository.EmployeeRepo;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,19 +53,33 @@ public class EmployeeProfileService {
         return new EmployeeProfile(employee);
     }
 
-    public EmployeeProfile updateProfile(Integer id, String key, String val) {
-        int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Employee> employeeOptional = employeeRepo.findById(id);
-        if (!employeeOptional.isPresent()) {
+    public EmployeeProfile updateProfile(Integer userId, String key, String val) {
+        Employee employee = employeeRepo.findEmployeeByUserId(userId);
+        if (employee == null) {
             throw new NullPointerException("The user is not existing");
         }
-        Employee employee = employeeOptional.get();
-        if (employee.getUserId() != userId) {
+        if ((int)SecurityContextHolder.getContext().getAuthentication().getPrincipal() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot update the profile of other employee.");
         }
         key = key.replace(" ", "");
         key = key.toLowerCase();
-        if (key.equals("firstname")) {
+        if (key.equals("id")) {
+            try {
+                Integer.parseInt(val);
+            } catch (Exception e) {
+                throw new BadInputException("You should input an integer for id!");
+            }
+            Integer employeeId = Integer.valueOf(val);
+            if (employee.getId() != employeeId) {
+                List<Employee> employees = employeeRepo.findAll();
+                Optional<Employee> employeeOptional = employees.stream().filter(e -> e.getId() == employeeId).findAny();
+                if (employeeOptional.isPresent()) {
+                    throw new DuplicateIdException("The id is already exist!");
+                }
+                employee.setId(Integer.valueOf(val));
+            }
+        }
+        else if (key.equals("firstname")) {
             employee.setFirstName(val);
         }
         else if (key.equals("lastname")) {
@@ -177,4 +194,5 @@ public class EmployeeProfileService {
         }
         return employee;
     }
+
 }
