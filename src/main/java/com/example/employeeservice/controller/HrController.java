@@ -32,7 +32,8 @@ public class HrController {
     //3. Home Page. 1-indexed Paginated
     // TODO: exception to be handled
     @GetMapping("/home")
-    public ResponseEntity<Object> findAllVisaStatus(@PathParam("page") int page, @PathParam("itemsPerPage") int itemsPerPage) {
+    public ResponseEntity<Object> findAllVisaStatus(@PathParam("page") Integer page, @PathParam("itemsPerPage") Integer itemsPerPage) {
+        System.out.println("开始");
         List<VisaStatusResponse> visaStatusResponses = hrHomepageService.findAllVisaStatusPaginated(page, itemsPerPage);
         return ResponseHandler.generateResponse(
                 "All active visa status.",
@@ -56,7 +57,7 @@ public class HrController {
     //4.b. summary view. 1-indexed Paginated and sorted by last name
     @GetMapping("/view")
     public ResponseEntity<Object> findAllEmployeesSummaries(@PathParam("page") Integer page, @PathParam("itemsPerPage") Integer itemsPerPage) {
-        List<EmployeeSummary> employeeSummaries = hrEmployeeProfilesService.findAllEmployeesSummaries(page - 1, itemsPerPage);
+        List<EmployeeSummary> employeeSummaries = hrEmployeeProfilesService.findAllEmployeesSummaries(page, itemsPerPage);
         return ResponseHandler.generateResponse(
                 "Page " + page + " of all employees' summary.",
                 HttpStatus.OK,
@@ -110,8 +111,8 @@ public class HrController {
     }
 
     // 6.b.iii
-    @GetMapping("/housing")
-    public ResponseEntity<Object> findEmployeeSummariesByHouseId(@PathParam("houseId") Integer houseId) {
+    @GetMapping("/housing/{houseId}")
+    public ResponseEntity<Object> findEmployeeSummariesByHouseId(@PathVariable Integer houseId) {
         List<EmployeeSummary> employeeSummaries = hrHousingService.findEmployeeSummariesByHouseId(houseId);
         return ResponseHandler.generateResponse(
                 "Found " + employeeSummaries.size() + " employees of houseId " + houseId,

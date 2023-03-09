@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class Employee {
     private List<Contact> contacts;
     private List<Address> addresses;
     private List<VisaStatus> visaStatuses;
-    private List<PersonalDocument> personalDocuments;
+    private List<PersonalDocument> personalDocuments = new ArrayList<>();
 
 
 }

@@ -28,11 +28,6 @@ public class EmployeeController {
     //6. c find profile by id
     @GetMapping("/findById")
     public ResponseEntity<Object> findEmployeeProfileById(@PathParam("id") Integer id) {
-
-
-
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
         EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileById(id);
         return ResponseHandler.generateResponse(
                 "Found the employee profile.",
@@ -41,16 +36,6 @@ public class EmployeeController {
         );
     }
 
-    //6. c find profile by email
-    @GetMapping("/findByEmail")
-    public ResponseEntity<Object> findEmployeeProfileByEmail(@PathParam("email") String email) {
-        EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileByEmail(email);
-        return ResponseHandler.generateResponse(
-                "Found the employee profile.",
-                HttpStatus.OK,
-                employeeProfile
-        );
-    }
 
     //6.c. update an employee (profile)
     @PutMapping("/updateEmployee")
@@ -64,10 +49,20 @@ public class EmployeeController {
     }
 
     //6.c. update profile
-    //todo: handle exceptions
     @PutMapping("/update")
     public ResponseEntity<Object> updateProfile(@PathParam("id") Integer id, @PathParam("key") String key, @PathParam("val") String val) {
         EmployeeProfile employeeProfile = employeeProfileService.updateProfile(id, key, val);
+        return ResponseHandler.generateResponse(
+                "Updated employee profile successfully.",
+                HttpStatus.OK,
+                employeeProfile
+        );
+    }
+
+    // 6.c update profile of the employee whose userId equals the one extracted from token
+    @PutMapping("/updateProfile")
+    public ResponseEntity<Object> updateProfile(@PathParam("key") String key, @PathParam("val") String val) {
+        EmployeeProfile employeeProfile = employeeProfileService.updateProfile(key, val);
         return ResponseHandler.generateResponse(
                 "Updated employee profile successfully.",
                 HttpStatus.OK,

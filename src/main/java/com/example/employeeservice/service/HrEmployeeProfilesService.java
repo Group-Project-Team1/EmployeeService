@@ -27,9 +27,15 @@ public class HrEmployeeProfilesService {
         employeeRepo.save(employee);
     }
 
-    public List<EmployeeSummary> findAllEmployeesSummaries(int page, int itemsPerPage) {
+    public List<EmployeeSummary> findAllEmployeesSummaries(Integer page, Integer itemsPerPage) {
+        if (page == null || itemsPerPage == null) {
+            throw new NullPointerException("Please input the page number and itemsPerPage!");
+        }
+        if (page <= 0) {
+            throw new ArithmeticException("The page number should be at least 1!");
+        }
         Sort sort = Sort.by(Sort.Direction.ASC, "lastName");
-        Pageable pageable = PageRequest.of(page, itemsPerPage, sort);
+        Pageable pageable = PageRequest.of(page - 1, itemsPerPage, sort);
         List<Employee> employees = pagingAndSortingRepo.findAll(pageable).getContent();
         return employees.stream().sorted((a, b) -> a.getLastName().compareTo(b.getLastName())).map(e -> new EmployeeSummary(e)).collect(Collectors.toList());
     }
