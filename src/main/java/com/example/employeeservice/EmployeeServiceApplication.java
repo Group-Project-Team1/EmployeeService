@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-//@EnableEurekaClient
+@EnableEurekaClient
 public class EmployeeServiceApplication {
 
     public static void main(String[] args) {

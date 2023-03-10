@@ -40,12 +40,12 @@ public class EmployeeProfileServiceTest {
     private final int employeeId = 1;
     private final Employee employee = new Employee();
     private final EmployeeProfile employeeProfile = new EmployeeProfile(employee);
-
-    @BeforeEach
-    public void setUp() {
-        employee.setUserId(userId);
-        employee.setId(employeeId);
-    }
+//
+//    @BeforeEach
+//    public void setUp() {
+//        employee.setUserId(userId);
+//        employee.setId(employeeId);
+//    }
 
     @Test
     public void testUpdateEmployee() {

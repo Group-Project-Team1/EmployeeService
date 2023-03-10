@@ -19,7 +19,7 @@ public class EmployeeSummary {
     public EmployeeSummary(Employee employee) {
         this.name = employee.getFirstName() + " " + (employee.getMiddleName() + employee.getMiddleName() == null ? "" : " ") + employee.getLastName();
         this.ssn = employee.getSsn();
-        this.workAuthorizationTitle = employee.getVisaStatuses().get(employee.getVisaStatuses().size() - 1).getVisaType();
+        this.workAuthorizationTitle = employee.getVisaStatuses().size() - 1 == -1 ? "N/A" : employee.getVisaStatuses().get(employee.getVisaStatuses().size() - 1).getVisaType();
         this.phoneNumber = employee.getCellPhone();
         this.email = employee.getEmail();
     }

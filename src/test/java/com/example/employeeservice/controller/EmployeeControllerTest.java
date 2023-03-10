@@ -1,70 +1,70 @@
 package com.example.employeeservice.controller;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
-
-import com.example.employeeservice.controller.EmployeeController;
-import com.example.employeeservice.domain.entity.Address;
-import com.example.employeeservice.domain.entity.Contact;
 import com.example.employeeservice.domain.entity.Employee;
-import com.example.employeeservice.domain.entity.PersonalDocument;
-import com.example.employeeservice.domain.entity.VisaStatus;
 import com.example.employeeservice.domain.response.EmployeeProfile;
-import com.example.employeeservice.domain.response.ResponseHandler;
-import com.example.employeeservice.service.EmployeeProfileService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.Mockito.when;
+import com.example.employeeservice.service.EmployeeProfileService;
+import org.mockito.Mockito;
+
+import java.util.HashMap;
 
 @SpringBootTest()
 @Slf4j
 public class EmployeeControllerTest {
 
-    private MockMvc mockMvc;
+    private EmployeeController employeeController;
 
     @Mock
     private EmployeeProfileService employeeProfileService;
 
-    @InjectMocks
-    private EmployeeController employeeController;
-
-
     @BeforeEach
-    void init() {
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(employeeController).build();
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        employeeController = new EmployeeController(employeeProfileService);
     }
 
+//    @Test
+//    public void findEmployeeById() throws Exception {
+//        Mockito.when(employeeProfileService.findEmployeeById(1)).thenReturn(Employee.builder().build());
+//
+//        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+//                .get("employee/{employeeId}", 1)
+//                .contentType(MediaType.APPLICATION_JSON);
+//
+//        ResultActions perform = mockMvc.perform(request);
+//    }
+
     @Test
-    public void testUpdateEmployee() {
+    public void testUpdateEmployee() throws Exception {
         // Setup
         Employee employee = new Employee();
         EmployeeProfile employeeProfile = new EmployeeProfile();
-        when(employeeProfileService.updateEmployee(employee)).thenReturn(employeeProfile);
+        Mockito.when(employeeProfileService.updateEmployee(employee)).thenReturn(employeeProfile);
 
         // Test
         ResponseEntity<Object> response = employeeController.updateEmployee(employee);
 
         // Verify
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(employeeProfile, response.getBody());
+        assertEquals(employeeProfile, ((HashMap<String, Object>)response.getBody()).get("data"));
     }
 
     @Test
-    public void testUpdateProfile() {
+    public void testUpdateProfile() throws Exception {
         // Setup
         Integer id = 1;
         String key = "firstName";
-        String val = "John";
+        String val = "ff";
         EmployeeProfile employeeProfile = new EmployeeProfile();
         when(employeeProfileService.updateProfile(id, key, val)).thenReturn(employeeProfile);
 
@@ -73,6 +73,6 @@ public class EmployeeControllerTest {
 
         // Verify
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(employeeProfile, response.getBody());
+        assertEquals(employeeProfile, ((HashMap<String, Object>)response.getBody()).get("data"));
     }
 }

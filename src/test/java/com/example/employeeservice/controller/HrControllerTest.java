@@ -1,32 +1,36 @@
 package com.example.employeeservice.controller;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import java.util.ArrayList;
-import java.util.List;
+import com.example.employeeservice.domain.entity.Employee;
+import com.example.employeeservice.domain.response.EmployeeProfile;
+import com.example.employeeservice.domain.response.EmployeeSummary;
+import com.example.employeeservice.domain.response.ResponseHandler;
 import com.example.employeeservice.domain.response.VisaStatusResponse;
-import com.example.employeeservice.service.HrEmployeeProfilesService;
 import com.example.employeeservice.service.HrHomepageService;
+import com.example.employeeservice.service.HrEmployeeProfilesService;
 import com.example.employeeservice.service.HrHousingService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.ResponseEntity;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest()
 @Slf4j
-public class HrControllerTest {
+class HrControllerTest {
 
-    private MockMvc mockMvc;
+    private HrController hrController;
+
     @Mock
     private HrHomepageService hrHomepageService;
 
@@ -36,34 +40,95 @@ public class HrControllerTest {
     @Mock
     private HrHousingService hrHousingService;
 
-    @InjectMocks
-    private HrController hrController;
-
     @BeforeEach
-    void init() {
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(hrController).build();
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        hrController = new HrController(hrHomepageService, hrEmployeeProfilesService, hrHousingService);
     }
 
     @Test
-    public void testFindAllVisaStatus() throws Exception {
-        // Setup
-        int page = 1;
-        int itemsPerPage = 10;
-        List<VisaStatusResponse> visaStatusResponses = new ArrayList<>();
-        visaStatusResponses.add(new VisaStatusResponse("Li Lei", "H1B", "2024-06-01", "666"));
-        when(hrHomepageService.findAllVisaStatusPaginated(page, itemsPerPage)).thenReturn(visaStatusResponses);
+    void testFindAllVisaStatus() throws Exception {
+        // mock the service response
+        List<VisaStatusResponse> visaStatusResponses = Arrays.asList(new VisaStatusResponse(new Employee(), null));
+        when(hrHomepageService.findAllVisaStatusPaginated(1, 10)).thenReturn(visaStatusResponses);
 
-        // Execution
-        mockMvc.perform(get("/hr/home?page=" + page + "&itemsPerPage=" + itemsPerPage))
-                .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.message").value("All active visa status."))
-                .andExpect((ResultMatcher) jsonPath("$.status").value(HttpStatus.OK.toString()))
-                .andExpect((ResultMatcher) jsonPath("$.data[0].name").value("John Doe"))
-                .andExpect((ResultMatcher) jsonPath("$.data[0].visaType").value("H1B"))
-                .andExpect((ResultMatcher) jsonPath("$.data[0].visaExpirationDate").value("2024-06-01"));
-        // Verification
+        // invoke the controller method
+        ResponseEntity<Object> response = hrController.findAllVisaStatus(1, 10);
+
+        // assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(visaStatusResponses, ((HashMap<String, Object>)response.getBody()).get("data"));
+
     }
+
+    @Test
+    void testFindAllEmployeesSummaries() throws Exception {
+        // Mock the service response
+        List<EmployeeSummary> employeeSummaries = Arrays.asList(new EmployeeSummary(new Employee()));
+        when(hrEmployeeProfilesService.findAllEmployeesSummaries(2, 8)).thenReturn(employeeSummaries);
+        // Invoke the controller method
+        ResponseEntity<Object> response = hrController.findAllEmployeesSummaries(2, 8);
+        // Assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Page 2 of all employees' summary.", ((HashMap<String, Object>)response.getBody()).get("message"));
+        assertEquals(employeeSummaries, ((HashMap<String, Object>)response.getBody()).get("data"));
+    }
+
+    @Test
+    void testFindEmployeeById() throws Exception {
+        // create a mock employee
+        Employee employee = new Employee();
+        employee.setId(1);
+        employee.setFirstName("名字");
+        employee.setLastName("姓氏");
+        employee.setEmail("xingming@hao123.com");
+        employee.setVisaStatuses(Collections.emptyList());
+
+        // mock the service response
+        when(hrEmployeeProfilesService.findEmployeeById(1)).thenReturn(employee);
+
+        // invoke the controller method
+        ResponseEntity<Object> response = hrController.findEmployeeById(1);
+
+        // assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(employee, ((HashMap<String, Object>)response.getBody()).get("data"));
+    }
+    @Test
+    void testFindEmployeeProfileByEmail() throws Exception {
+        // Mock the service response
+        Employee employee = new Employee();
+        employee.setEmail("11@11.com");
+        employee.setFirstName("1");
+        employee.setLastName("1");
+        employee.setMiddleName("1");
+        employee.setPreferredName("1");
+        when(hrEmployeeProfilesService.findEmployeeProfileByEmail("11@11.com"))
+                .thenReturn(new EmployeeProfile(employee));
+
+        // Invoke the controller method
+        ResponseEntity<Object> response = hrController.findEmployeeProfileByEmail("11@11.com");
+
+        // Assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody() instanceof HashMap);
+        HashMap<String, Object> responseBody = (HashMap<String, Object>) response.getBody();
+        assertEquals("Found the employee profile.", responseBody.get("message"));
+        assertEquals(HttpStatus.OK.value(), responseBody.get("status"));
+        assertTrue(responseBody.containsKey("data"));
+        assertTrue(responseBody.get("data") instanceof EmployeeProfile);
+        EmployeeProfile employeeProfile = (EmployeeProfile) responseBody.get("data");
+        assertEquals(employee.getEmail(), employeeProfile.getName().getEmail());
+        assertEquals(employee.getFirstName(), employeeProfile.getName().getFirstName());
+        assertEquals(employee.getLastName(), employeeProfile.getName().getLastName());
+        assertEquals(employee.getMiddleName(), employeeProfile.getName().getMiddleName());
+        assertEquals(employee.getPreferredName(), employeeProfile.getName().getPreferredName());
+    }
+
+
+
+
+
 
 
 }

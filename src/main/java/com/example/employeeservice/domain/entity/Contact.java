@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class Contact {
 
     @ToString.Exclude

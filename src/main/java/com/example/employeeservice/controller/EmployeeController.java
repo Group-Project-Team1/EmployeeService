@@ -5,6 +5,7 @@ import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.domain.response.ResponseHandler;
 import com.example.employeeservice.security.JwtProvider;
 import com.example.employeeservice.service.EmployeeProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +19,8 @@ import javax.websocket.server.PathParam;
 public class EmployeeController {
     private final EmployeeProfileService employeeProfileService;
 
-    public EmployeeController(EmployeeProfileService employeeProfileService, JwtProvider jwtProvider) {
+    @Autowired
+    public EmployeeController(EmployeeProfileService employeeProfileService) {
         this.employeeProfileService = employeeProfileService;
     }
 

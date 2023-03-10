@@ -24,10 +24,10 @@ public class EmployeeProfile {
 
     public EmployeeProfile(Employee employee) {
         this.name = new Name(employee);
-        this.address = employee.getAddresses().get(employee.getAddresses().size() - 1);
+        this.address = employee.getAddresses().size() == 0 ? new Address() : employee.getAddresses().get(employee.getAddresses().size() - 1);
         this.contactInfo = new ContactInfo(employee.getCellPhone(), employee.getAlternatePhone());
         this.employment = new Employment(employee);
-        this.emergencyContact = new EmergencyContact(employee.getContacts().get(employee.getContacts().size() - 1));
+        this.emergencyContact = employee.getContacts().size() == 0 ? new EmergencyContact(): new EmergencyContact(employee.getContacts().get(employee.getContacts().size() - 1));
         this.documents = employee.getPersonalDocuments().stream().map(d -> d.getPath()).collect(Collectors.toList());
     }
 
