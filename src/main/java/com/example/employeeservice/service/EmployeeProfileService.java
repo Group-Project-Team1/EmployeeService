@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -196,4 +197,29 @@ public class EmployeeProfileService {
         return employee;
     }
 
+    public Employee addEmployee(Employee employee) {
+        employeeRepo.save(employee);
+        return employee;
+    }
+
+    public Integer generateEmployeeId() {
+        List<Employee> employees = employeeRepo.findAll();
+        if (employees == null || employees.size() == 0) {
+            return 1;
+        }
+        Collections.sort(employees, (a, b) -> a.getId() - b.getId());
+        for (int i = 0; i < employees.size(); i++) {
+            if (employees.get(i).getId() != i + 1) {
+                return i + 1;
+            }
+        }
+        return employees.size();
+    }
+    public Employee findEmployeeByEmployeeId(Integer employeeId) {
+        Optional<Employee> employeeOptional = employeeRepo.findById(employeeId);
+        if (!employeeOptional.isPresent()) {
+            throw new NullPointerException("The employee id is not existing.");
+        }
+        return employeeOptional.get();
+    }
 }

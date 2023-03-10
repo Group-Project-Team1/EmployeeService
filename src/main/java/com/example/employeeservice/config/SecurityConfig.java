@@ -27,8 +27,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/employee-service/hr/**").hasAuthority("hr")
                 .antMatchers("/employee-service/employee/**").hasAuthority("employee")
+                .antMatchers("/employee-service/add").permitAll()
+                .antMatchers("/employee-service/generate").permitAll()
+                .antMatchers("/employee-service/find/**").permitAll()
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .httpBasic();
+
     }
 
     @Override
