@@ -1,18 +1,13 @@
 package com.example.employeeservice.controller;
-
 import com.example.employeeservice.domain.entity.*;
 import com.example.employeeservice.domain.response.EmployeeProfile;
 import com.example.employeeservice.domain.response.ResponseHandler;
-import com.example.employeeservice.security.JwtProvider;
 import com.example.employeeservice.service.EmployeeProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/employee")

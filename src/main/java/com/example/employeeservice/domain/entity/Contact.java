@@ -22,4 +22,9 @@ public class Contact {
     private String Relationship;
     @ToString.Exclude
     private String type;
+
+    public Contact(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }

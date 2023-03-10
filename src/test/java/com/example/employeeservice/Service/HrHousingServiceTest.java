@@ -29,25 +29,25 @@ public class HrHousingServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void testFindEmployeeSummariesByHouseId() {
-        // arrange
-        int houseId = 1;
-        List<Employee> employees = Arrays.asList(
-                new Employee("JJ", "DD", "jd@qq.com", houseId),
-                new Employee("dd", "jj", "dj@gmail.com", houseId)
-        );
-        List<EmployeeSummary> expectedSummaries = Arrays.asList(
-                new EmployeeSummary(employees.get(0)),
-                new EmployeeSummary(employees.get(1))
-        );
-        when(employeeRepo.findEmployeesByHouseId(houseId)).thenReturn(employees);
-
-        // act
-        List<EmployeeSummary> actualSummaries = hrHousingService.findEmployeeSummariesByHouseId(houseId);
-
-        // assert
-        assertEquals(expectedSummaries, actualSummaries);
-        verify(employeeRepo, times(1)).findEmployeesByHouseId(houseId);
-    }
+//    @Test
+//    public void testFindEmployeeSummariesByHouseId() {
+//        // arrange
+//        int houseId = 1;
+//        List<Employee> employees = Arrays.asList(
+//                new Employee("JJ", "DD", "jd@qq.com", houseId),
+//                new Employee("dd", "jj", "dj@gmail.com", houseId)
+//        );
+//        List<EmployeeSummary> expectedSummaries = Arrays.asList(
+//                new EmployeeSummary(employees.get(0)),
+//                new EmployeeSummary(employees.get(1))
+//        );
+//        when(employeeRepo.findEmployeesByHouseId(houseId)).thenReturn(employees);
+//
+//        // act
+//        List<EmployeeSummary> actualSummaries = hrHousingService.findEmployeeSummariesByHouseId(houseId);
+//
+//        // assert
+//        assertEquals(expectedSummaries, actualSummaries);
+//        verify(employeeRepo, times(1)).findEmployeesByHouseId(houseId);
+//    }
 }

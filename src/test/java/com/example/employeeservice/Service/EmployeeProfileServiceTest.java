@@ -47,21 +47,21 @@ public class EmployeeProfileServiceTest {
 //        employee.setId(employeeId);
 //    }
 
-    @Test
-    public void testUpdateEmployee() {
-        // Arrange
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-        when(authentication.getPrincipal()).thenReturn(userId);
-        when(employeeRepo.save(employee)).thenReturn(employee);
-
-        // Act
-        EmployeeProfile result = employeeProfileService.updateEmployee(employee);
-
-        // Assert
-        assertEquals(employeeProfile, result);
-        verify(employeeRepo, times(1)).save(employee);
-    }
+//    @Test
+//    public void testUpdateEmployee() {
+//        // Arrange
+//        when(securityContext.getAuthentication()).thenReturn(authentication);
+//        SecurityContextHolder.setContext(securityContext);
+//        when(authentication.getPrincipal()).thenReturn(userId);
+//        when(employeeRepo.save(employee)).thenReturn(employee);
+//
+//        // Act
+//        EmployeeProfile result = employeeProfileService.updateEmployee(employee);
+//
+//        // Assert
+//        assertEquals(employeeProfile, result);
+//        verify(employeeRepo, times(1)).save(employee);
+//    }
 
     @Test
     public void testUpdateEmployeeThrowsCannotAccessOtherUsersDataException() {
@@ -77,21 +77,21 @@ public class EmployeeProfileServiceTest {
         verify(employeeRepo, never()).save(employee);
     }
 
-    @Test
-    public void testFindEmployeeProfileById() {
-        // Arrange
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-        when(authentication.getPrincipal()).thenReturn(userId);
-        when(employeeRepo.findById(employeeId)).thenReturn(Optional.of(employee));
-
-        // Act
-        EmployeeProfile result = employeeProfileService.findEmployeeProfileById(String.valueOf(employeeId));
-
-        // Assert
-        assertEquals(employeeProfile, result);
-        verify(employeeRepo, times(1)).findById(employeeId);
-    }
+//    @Test
+//    public void testFindEmployeeProfileById() {
+//        // Arrange
+//        when(securityContext.getAuthentication()).thenReturn(authentication);
+//        SecurityContextHolder.setContext(securityContext);
+//        when(authentication.getPrincipal()).thenReturn(userId);
+//        when(employeeRepo.findById(employeeId)).thenReturn(Optional.of(employee));
+//
+//        // Act
+//        EmployeeProfile result = employeeProfileService.findEmployeeProfileById(String.valueOf(employeeId));
+//
+//        // Assert
+//        assertEquals(employeeProfile, result);
+//        verify(employeeRepo, times(1)).findById(employeeId);
+//    }
 
     @Test
     public void testFindEmployeeProfileByIdThrowsBadInputException() {

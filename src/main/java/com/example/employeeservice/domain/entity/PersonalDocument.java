@@ -19,4 +19,8 @@ public class PersonalDocument {
     private String comment;
     private Date createDate;
 
+    public PersonalDocument(String title) {
+        this.title = title;
+    }
+
 }

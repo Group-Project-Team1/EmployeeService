@@ -23,8 +23,9 @@ public class HrEmployeeProfilesService {
     @Autowired
     public PagingAndSortingRepo pagingAndSortingRepo;
 
-    public void saveEmployee(Employee employee) {
+    public Employee saveEmployee(Employee employee) {
         employeeRepo.save(employee);
+        return employee;
     }
 
     public List<EmployeeSummary> findAllEmployeesSummaries(Integer page, Integer itemsPerPage) {
