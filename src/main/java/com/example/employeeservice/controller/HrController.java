@@ -31,7 +31,7 @@ public class HrController {
 
     //3. Home Page. 1-indexed Paginated
     @GetMapping("/home")
-    public ResponseEntity<Object> findAllVisaStatus(@PathParam("page") Integer page, @PathParam("itemsPerPage") Integer itemsPerPage) {
+    public ResponseEntity<Object> findAllVisaStatus(@RequestParam("page") Integer page, @RequestParam("itemsPerPage") Integer itemsPerPage) {
         List<VisaStatusResponse> visaStatusResponses = hrHomepageService.findAllVisaStatusPaginated(page, itemsPerPage);
         return ResponseHandler.generateResponse(
                 "All active visa status.",
@@ -54,7 +54,7 @@ public class HrController {
 
     //4.b. summary view. 1-indexed Paginated and sorted by last name
     @GetMapping("/view")
-    public ResponseEntity<Object> findAllEmployeesSummaries(@PathParam("page") Integer page, @PathParam("itemsPerPage") Integer itemsPerPage) {
+    public ResponseEntity<Object> findAllEmployeesSummaries(@RequestParam("page") Integer page, @RequestParam("itemsPerPage") Integer itemsPerPage) {
         List<EmployeeSummary> employeeSummaries = hrEmployeeProfilesService.findAllEmployeesSummaries(page, itemsPerPage);
         return ResponseHandler.generateResponse(
                 "Page " + page + " of all employees' summary.",
@@ -64,7 +64,7 @@ public class HrController {
     }
 
     @GetMapping("/findById")
-    public ResponseEntity<Object> findEmployeeById(@PathParam("id") Integer id) {
+    public ResponseEntity<Object> findEmployeeById(@RequestParam("id") Integer id) {
         Employee employee = hrEmployeeProfilesService.findEmployeeById(id);
         return ResponseHandler.generateResponse(
                 "Found the employee.",
@@ -75,7 +75,7 @@ public class HrController {
 
     // 4.b.1. enter the link to open a new tab that display the entire profile of an employee
     @GetMapping("/findByEmail")
-    public ResponseEntity<Object> findEmployeeProfileByEmail(@PathParam("email") String email) {
+    public ResponseEntity<Object> findEmployeeProfileByEmail(@RequestParam("email") String email) {
         EmployeeProfile employeeProfile = hrEmployeeProfilesService.findEmployeeProfileByEmail(email);
         return ResponseHandler.generateResponse(
                 "Found the employee profile.",
@@ -86,7 +86,7 @@ public class HrController {
 
     //4.c filtering employees profiles on email
     @GetMapping("/filterEmail")
-    public ResponseEntity<Object> findEmployeeProfilesFilteredOnEmail(@PathParam("emailSeg") String emailSeg) {
+    public ResponseEntity<Object> findEmployeeProfilesFilteredOnEmail(@RequestParam("emailSeg") String emailSeg) {
         List<EmployeeProfile> employeeProfiles = hrEmployeeProfilesService.findEmployeeProfilesFilteredOnEmail(emailSeg);
         return ResponseHandler.generateResponse(
                 "Found employee profiles filtered on the email segment provided.",
@@ -97,7 +97,7 @@ public class HrController {
 
     //4.c filtering employees profiles on name (last name, first name, middle name, preferred name)
     @GetMapping("/filterName")
-    public ResponseEntity<Object> findEmployeeProfilesFilteredOnName(@PathParam("nameSeg") String nameSeg) {
+    public ResponseEntity<Object> findEmployeeProfilesFilteredOnName(@RequestParam("nameSeg") String nameSeg) {
         List<EmployeeProfile> employeeProfiles = hrEmployeeProfilesService.findEmployeeProfilesFilteredOnName(nameSeg);
         return ResponseHandler.generateResponse(
                 "Found employee profiles filtered on the name segment provided.",

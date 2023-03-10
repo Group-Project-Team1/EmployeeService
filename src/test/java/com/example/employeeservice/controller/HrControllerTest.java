@@ -125,6 +125,42 @@ class HrControllerTest {
         assertEquals(employee.getPreferredName(), employeeProfile.getName().getPreferredName());
     }
 
+    @Test
+    void testFindEmployeeProfilesFilteredOnEmail() throws Exception {
+        // mock the service response
+        List<EmployeeProfile> employeeProfiles = Arrays.asList(new EmployeeProfile(new Employee()));
+        when(hrEmployeeProfilesService.findEmployeeProfilesFilteredOnEmail("test@example.com")).thenReturn(employeeProfiles);
+
+        // invoke the controller method
+        ResponseEntity<Object> response = hrController.findEmployeeProfilesFilteredOnEmail("test@example.com");
+
+        // assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(employeeProfiles, ((HashMap<String, Object>)response.getBody()).get("data"));
+    }
+
+    @Test
+    void testFindEmployeeProfilesFilteredOnName() {
+        // setup mock response from repository
+        List<EmployeeProfile> employeesProfiles = Arrays.asList(
+                new EmployeeProfile(new Employee("ming1", "xing1", "x1m1@example.com", 1)),
+                new EmployeeProfile(new Employee("ming2", "xing2", "x2m2@example.com", 1))
+        );
+        when(hrEmployeeProfilesService.findEmployeeProfilesFilteredOnName("xing"))
+                .thenReturn(employeesProfiles);
+
+        // call service method
+        List<EmployeeProfile> employeeProfiles = hrEmployeeProfilesService.findEmployeeProfilesFilteredOnName("xing");
+
+        // assert the response
+        assertEquals(2, employeeProfiles.size());
+        assertEquals("ming1", employeeProfiles.get(0).getName().getFirstName());
+        assertEquals("xing1", employeeProfiles.get(0).getName().getLastName());
+        assertEquals("ming2", employeeProfiles.get(1).getName().getFirstName());
+        assertEquals("xing2", employeeProfiles.get(1).getName().getLastName());
+    }
+
+
 
 
 

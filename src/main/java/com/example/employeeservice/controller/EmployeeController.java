@@ -26,7 +26,7 @@ public class EmployeeController {
 
     //6. c find profile by id
     @GetMapping("/findById")
-    public ResponseEntity<Object> findEmployeeProfileById(@PathParam("id") String id) {
+    public ResponseEntity<Object> findEmployeeProfileById(@RequestParam("id") String id) {
         EmployeeProfile employeeProfile = employeeProfileService.findEmployeeProfileById(id);
         return ResponseHandler.generateResponse(
                 "Found the employee profile.",
@@ -49,7 +49,7 @@ public class EmployeeController {
 
     //6.c. update profile
     @PutMapping("/update")
-    public ResponseEntity<Object> updateProfile(@PathParam("userId") Integer userId, @PathParam("key") String key, @PathParam("val") String val) {
+    public ResponseEntity<Object> updateProfile(@RequestParam("userId") Integer userId, @RequestParam("key") String key, @RequestParam("val") String val) {
         EmployeeProfile employeeProfile = employeeProfileService.updateProfile(userId, key, val);
         return ResponseHandler.generateResponse(
                 "Updated employee profile successfully.",
@@ -60,7 +60,7 @@ public class EmployeeController {
 
     // 6.C. update profile - add to list
     @PostMapping("/addContact")
-    public ResponseEntity<Object> addContact(@PathParam("id") Integer id, @RequestBody Contact contact) {
+    public ResponseEntity<Object> addContact(@RequestParam("id") Integer id, @RequestBody Contact contact) {
         employeeProfileService.addContact(id, contact);
         return ResponseHandler.generateResponse(
                 "Added a contact successfully.",
@@ -70,7 +70,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/addAddress")
-    public ResponseEntity<Object> addAddress(@PathParam("id") Integer id, @RequestBody Address address) {
+    public ResponseEntity<Object> addAddress(@RequestParam("id") Integer id, @RequestBody Address address) {
         employeeProfileService.addAddress(id, address);
         return ResponseHandler.generateResponse(
                 "Added an address successfully.",
@@ -80,7 +80,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/addVisaStatus")
-    public ResponseEntity<Object> addVisaStatus(@PathParam("id") Integer id, @RequestBody VisaStatus visaStatus) {
+    public ResponseEntity<Object> addVisaStatus(@RequestParam("id") Integer id, @RequestBody VisaStatus visaStatus) {
         employeeProfileService.addVisaStatus(id, visaStatus);
         return ResponseHandler.generateResponse(
                 "Added a visaStatus successfully.",
