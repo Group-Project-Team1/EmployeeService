@@ -185,6 +185,7 @@ public class EmployeeProfileService {
         for(PersonalDocument p : personalDocuments){
             if(p.getTitle().equals(personalDocument.getTitle())){
                 personalDocuments.remove(p);
+                break;
             }
         }
         personalDocuments.add(personalDocument);
@@ -199,7 +200,7 @@ public class EmployeeProfileService {
         }
         Employee employee = employeeOptional.get();
         int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (employee.getUserId() != userId) {
+        if (userId != 1 && employee.getUserId() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot access the profile of other employee.");
         }
         return employee;
