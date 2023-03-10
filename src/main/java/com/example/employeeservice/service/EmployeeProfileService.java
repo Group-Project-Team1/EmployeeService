@@ -207,6 +207,7 @@ public class EmployeeProfileService {
     }
 
     public Employee addEmployee(Employee employee) {
+        System.out.println(employee);
         employeeRepo.save(employee);
         return employee;
     }
@@ -225,10 +226,17 @@ public class EmployeeProfileService {
         return employees.size();
     }
     public Employee findEmployeeByEmployeeId(Integer employeeId) {
-        Optional<Employee> employeeOptional = employeeRepo.findById(employeeId);
-        if (!employeeOptional.isPresent()) {
-            throw new NullPointerException("The employee id is not existing.");
-        }
-        return employeeOptional.get();
+//        Optional<Employee> employeeOptional = employeeRepo.findById(employeeId);
+//        if (!employeeOptional.isPresent()) {
+//            throw new NullPointerException("The employee id is not existing.");
+//        }
+//        System.out.println(employeeOptional.get().getId());
+//        System.out.println(employeeOptional.get().getUserId());
+//        return employeeOptional.get();
+        Employee employee = employeeRepo.findEmployeeById(employeeId);
+        System.out.println(employeeId);
+        System.out.println(employee.getId());
+        System.out.println(employee.getUserId());
+        return employee;
     }
 }

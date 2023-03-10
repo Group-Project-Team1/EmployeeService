@@ -65,6 +65,8 @@ public class HrEmployeeProfilesService {
         if (!employeeOptional.isPresent()) {
             throw new NullPointerException("The user is not existing");
         }
+        System.out.println(employeeOptional.get().getId());
+        System.out.println(employeeOptional.get().getUserId());
         return employeeOptional.get();
     }
 }

@@ -20,4 +20,6 @@ public interface EmployeeRepo extends MongoRepository<Employee, Integer> {
     List<Employee> findEmployeesByHouseId(Integer houseId);
 
     Employee findEmployeeByUserId(Integer userId);
+
+    Employee findEmployeeById(Integer employeeId);
 }
