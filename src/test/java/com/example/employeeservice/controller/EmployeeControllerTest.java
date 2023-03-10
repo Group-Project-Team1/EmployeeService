@@ -125,4 +125,22 @@ public class EmployeeControllerTest {
         Employee e = employeeController.findEmployeeById(666);
         Assertions.assertEquals(employee, e);
     }
+
+    @Test
+    void testGenerateEmployeeId() {
+        Integer expectedId = 12345;
+        Mockito.when(employeeProfileService.generateEmployeeId()).thenReturn(expectedId);
+        Integer id  = employeeController.generateEmployeeId();
+        assertEquals(expectedId, id);
+    }
+
+    @Test
+    public void testAddEmployee() throws Exception {
+        Employee employee = new Employee();
+        Mockito.when(employeeProfileService.addEmployee(employee)).thenReturn(employee);
+        employeeController.addEmployee(employee);
+        Mockito.verify(employeeProfileService, Mockito.times(1)).addEmployee(employee);
+    }
+
+
 }

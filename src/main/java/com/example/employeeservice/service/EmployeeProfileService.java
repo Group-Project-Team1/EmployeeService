@@ -234,9 +234,9 @@ public class EmployeeProfileService {
 //        System.out.println(employeeOptional.get().getUserId());
 //        return employeeOptional.get();
         Employee employee = employeeRepo.findEmployeeById(employeeId);
-        System.out.println(employeeId);
-        System.out.println(employee.getId());
-        System.out.println(employee.getUserId());
+//        System.out.println(employeeId);
+//        System.out.println(employee.getId());
+//        System.out.println(employee.getUserId());
         return employee;
     }
 }
