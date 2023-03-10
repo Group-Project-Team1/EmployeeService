@@ -181,9 +181,18 @@ public class EmployeeProfileService {
         if (employee.getUserId() != userId) {
             throw new CannotAccessOtherUsersDataException("You cannot update the profile of other employee.");
         }
-        employee.getPersonalDocuments().add(personalDocument);
+
+        List<PersonalDocument> personalDocuments = employee.getPersonalDocuments();
+        for(PersonalDocument p : personalDocuments){
+            if(p.getTitle().equals(personalDocument.getTitle())){
+                personalDocuments.remove(p);
+            }
+        }
+        personalDocuments.add(personalDocument);
+        employee.setPersonalDocuments(personalDocuments);
         employeeRepo.save(employee);
     }
+
     public Employee findEmployeeById (Integer id){
         Optional<Employee> employeeOptional = employeeRepo.findById(id);
         if (!employeeOptional.isPresent()) {
